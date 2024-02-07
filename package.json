@@ -1,0 +1,22 @@
+{
+  "name": "qrticketingapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:frontend": "cd packages/frontend && npm start",
+    "start:backend": "cd packages/backend && npm start",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "lerna": "^8.1.2"
+  }
+}
