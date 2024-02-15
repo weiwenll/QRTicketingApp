@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
 app.use(express_1.default.json());
-// Basic route for GET request
+// Test backend is running with Postman
 app.get('/', (req, res) => {
     res.send('Hello World from backend!');
 });
