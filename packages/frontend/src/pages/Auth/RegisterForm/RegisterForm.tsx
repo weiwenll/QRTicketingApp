@@ -40,13 +40,17 @@ const RegisterForm: React.FC = () => {
       setError('');
 
       setTimeout(() => {
-        navigate('/');
-      }, 2000);
+        navigate('/home', { state: { isAuthenticated: true } });
+      }, 1500);
     }).catch(error => {
       console.error(error);
       setError('Registration failed. Please try again.'); // TODO: Update error message based on actual API error response
       setSuccess(false);
     });
+  };
+  const handleContinueAsGuest = () => {
+    localStorage.setItem('isGuest', 'true');
+    navigate('/home', { state: { isAuthenticated: false } });
   };
 
   return (
@@ -105,7 +109,7 @@ const RegisterForm: React.FC = () => {
           Already have an account? <a href="/login">Sign in</a>
         </Form.Group>
         <Form.Group className="text-muted text-center mt-3">
-        Or continue as a <a href="/">Guest</a>
+        Or continue as a <a href="/home" onClick={handleContinueAsGuest}>Guest</a>
         </Form.Group>
       </Form>
     </Container>
