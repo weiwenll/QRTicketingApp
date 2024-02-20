@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { registerUser } from '../../../services/api';
 
@@ -10,6 +11,7 @@ const RegisterForm: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const navigate = useNavigate();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -31,10 +33,24 @@ const RegisterForm: React.FC = () => {
     };
 
     registerUser(userData).then(data => {
-      console.log(data);
+      const { accessToken, refreshToken } = data;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      setSuccess(true);
+      setError('');
+
+      setTimeout(() => {
+        navigate('/home', { state: { isAuthenticated: true } });
+      }, 1500);
     }).catch(error => {
       console.error(error);
+      setError('Registration failed. Please try again.'); // TODO: Update error message based on actual API error response
+      setSuccess(false);
     });
+  };
+  const handleContinueAsGuest = () => {
+    localStorage.setItem('isGuest', 'true');
+    navigate('/home', { state: { isAuthenticated: false } });
   };
 
   return (
@@ -81,14 +97,19 @@ const RegisterForm: React.FC = () => {
             required
           />
         </Form.Group>
-        <Form.Group controlId="formPassword" className="mb-3">
+        {/* <Form.Group controlId="formPassword" className="mb-3">
           <Form.Label className="text-center">{!success && error}</Form.Label>
-        </Form.Group>
-        <Button variant="primary" type="submit" className="w-100 mt-3 mb-3">
+        </Form.Group> */}
+        {error && <div className="alert alert-danger" role="alert">{error}</div>}
+        {success && <div className="alert alert-success" role="alert">Registration successful!</div>}
+        <Button variant="primary" type="submit" className="w-100 mb-3">
           Register
         </Button>
         <Form.Group className="text-muted text-center">
           Already have an account? <a href="/login">Sign in</a>
+        </Form.Group>
+        <Form.Group className="text-muted text-center mt-3">
+        Or continue as a <a href="/home" onClick={handleContinueAsGuest}>Guest</a>
         </Form.Group>
       </Form>
     </Container>

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { UserRegistrationData } from './types';
 
 const apiClient = axios.create({
@@ -8,11 +8,17 @@ const apiClient = axios.create({
 
 export const registerUser = async (data: UserRegistrationData) => {
   try {
-    const response = await apiClient.post('/api/v1/auth/Register', data);
+    const response = await apiClient.post('tg_query_api/api/v1/auth/Register', data);
     return response.data;
   } catch (error) {
-    // Handle error
-    throw error;
+    const axiosError = error as AxiosError;
+    if (axiosError.response) {
+      console.error('Error data:', axiosError.response.data);
+    } else if (axiosError.request) {
+      console.error('Error request:', axiosError.request);
+    } else {
+      console.error('Error message:', axiosError.message);
+    }
   }
 };
 
