@@ -8,13 +8,41 @@ const RegisterForm: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+  const [phoneNumberError, setPhoneNumberError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
+  // Function to check password strength
+  const checkPasswordStrength = (password: string) => {
+    // Define the criteria for a strong password
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    // Test the password against the criteria
+    return strongPasswordRegex.test(password);
+  };
+  const validatePhoneNumber = (phoneNumber: string) => {
+    // Define the criteria for a valid phone number
+    const phoneNumberRegex = /^[8-9]\d{7}$/;
+    // Test the phone number against the criteria
+    return phoneNumberRegex.test(phoneNumber);
+  };
+  // Function to validate email format
+  const validateEmail = (email: string) => {
+    // Define the regex pattern for email validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Test the email against the pattern
+    return emailRegex.test(email);
+  };
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    setUsernameError('');
+    setPhoneNumberError('');
+    setEmailError('');
+    setPasswordError('');
     setError('');
     setSuccess(false);
 
@@ -23,7 +51,22 @@ const RegisterForm: React.FC = () => {
       setError('All fields are required.');
       return;
     }
-
+    
+    // Validate phone number
+    if (!validatePhoneNumber(phoneNumber)) {
+      setPhoneNumberError('Invalid phone number. Must be 8 digits starting with 8 or 9.');
+      return;
+    }
+    // Validate email format
+    if (!validateEmail(email)) {
+      setEmailError('Invalid email format.');
+      return;
+    }
+    // Check password strength
+    if (!checkPasswordStrength(password)) {
+      setPasswordError('Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters.');
+      return;
+    }
     const userData = {
       "userName": username,
       phoneNumber,
@@ -31,8 +74,8 @@ const RegisterForm: React.FC = () => {
       password,
       "role": "ROLE_USER"
     };
-
-    registerUser(userData).then(data => {
+    
+     registerUser(userData).then(data => {
       const { accessToken, refreshToken } = data;
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
@@ -66,6 +109,7 @@ const RegisterForm: React.FC = () => {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+           {usernameError && <div className="text-danger">{usernameError}</div>}
         </Form.Group>
         <Form.Group controlId="formContactNumber" className="mb-3">
           <Form.Label>Contact Number *</Form.Label>
@@ -76,6 +120,7 @@ const RegisterForm: React.FC = () => {
             onChange={(e) => setPhoneNumber(e.target.value)}
             required
           />
+           {phoneNumberError && <div className="text-danger">{phoneNumberError}</div>}
         </Form.Group>
         <Form.Group controlId="formEmail" className="mb-3">
           <Form.Label>Email *</Form.Label>
@@ -86,6 +131,7 @@ const RegisterForm: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+           {emailError && <div className="text-danger">{emailError}</div>}
         </Form.Group>
         <Form.Group controlId="formPassword" className="mb-3">
           <Form.Label>Password *</Form.Label>
@@ -96,15 +142,17 @@ const RegisterForm: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          {passwordError && <div className="text-danger">{passwordError}</div>}
         </Form.Group>
         {/* <Form.Group controlId="formPassword" className="mb-3">
           <Form.Label className="text-center">{!success && error}</Form.Label>
         </Form.Group> */}
-        {error && <div className="alert alert-danger" role="alert">{error}</div>}
-        {success && <div className="alert alert-success" role="alert">Registration successful!</div>}
+        
         <Button variant="primary" type="submit" className="w-100 mb-3">
           Register
         </Button>
+        {error && <div className="alert alert-danger" role="alert">{error}</div>}
+        {success && <div className="alert alert-success" role="alert">Registration successful!</div>}
         <Form.Group className="text-muted text-center">
           Already have an account? <a href="/login">Sign in</a>
         </Form.Group>
