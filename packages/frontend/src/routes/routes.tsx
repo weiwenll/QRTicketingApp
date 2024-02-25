@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
-// import LoginPage from '../pages/Auth/LoginForm/LoginForm';
+import LoginPage from '../pages/Auth/LoginForm';
 import RegisterPage from '../pages/Auth/RegisterForm/RegisterForm';
 // import NotFoundPage from './pages/NotFoundPage';
 
@@ -23,7 +23,8 @@ const AppRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="/home" element={<HomePage isAuthenticated={isAuthenticated} />} />
-      {/* <Route path="/login" element={<LoginPage />} /> */}
+      <Route path="/" element={<HomePage isAuthenticated={false} />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       {/* <Route path="*" element={<NotFoundPage />} /> */}
     </Routes>
