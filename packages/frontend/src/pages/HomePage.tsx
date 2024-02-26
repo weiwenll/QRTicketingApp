@@ -23,7 +23,7 @@ const HomePage: React.FC<HomePageProps> = ({ isAuthenticated }) => {
     <div>
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="/">Home Page</Navbar.Brand>`
+          <Navbar.Brand href="/">Home Page</Navbar.Brand>
           {userAuthenticated && (
             <Nav className="ml-auto">
               <Button onClick={handleLogoutClick} variant="outline-primary">Logout</Button>

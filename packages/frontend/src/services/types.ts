@@ -5,3 +5,8 @@ export interface UserRegistrationData {
   password: string;
   role: string;
 }
+
+export interface UserLoginData {
+  email: string;
+  password: string;
+}
