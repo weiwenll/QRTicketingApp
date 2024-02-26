@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
-import LoginPage from '../pages/Auth/LoginForm';
-import RegisterPage from '../pages/Auth/RegisterForm/RegisterForm';
+import LoginPage from '../components/Auth/LoginForm';
+import RegisterPage from '../components/Auth/RegisterForm';
 // import NotFoundPage from './pages/NotFoundPage';
 
 const AppRoutes: React.FC = () => {
@@ -11,13 +11,13 @@ const AppRoutes: React.FC = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    const isGuest = localStorage.getItem('isGuest');
+    // const isGuest = localStorage.getItem('isGuest');
     const isAuthenticated = !!token;
     setIsAuthenticated(isAuthenticated);
 
-    if (!token && !isGuest) {
-      navigate('/register');
-    }
+    // if (!token && !isGuest) {
+    //   navigate('/register');
+    // }
   }, [navigate]);
 
   return (
