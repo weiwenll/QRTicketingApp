@@ -24,7 +24,7 @@ export const registerUser = async (data: UserRegistrationData) => {
 
 export const loginUser = async (data: UserLoginData) => {
   try {
-    const response = await apiClient.post('tg_query_api/api/v1/auth/Login', data);
+    const response = await apiClient.post('tg_query_api/api/v1/auth/Authenticate', data);
     return response.data;
   } catch (error) {
     const axiosError = error as AxiosError;

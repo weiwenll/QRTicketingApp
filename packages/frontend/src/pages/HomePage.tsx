@@ -18,7 +18,7 @@ const HomePage: React.FC<HomePageProps> = ({ isAuthenticated }) => {
 
   const handleRegisterClick = () => navigate('/register');
   const handleLoginClick = () => navigate('/login');
-
+  const handlePaymentClick = () => navigate('/payment');
   return (
     <div>
       <Navbar bg="light" expand="lg">
@@ -33,6 +33,7 @@ const HomePage: React.FC<HomePageProps> = ({ isAuthenticated }) => {
             <Nav className="ml-auto">
               <Button onClick={handleRegisterClick} variant="outline-primary" className="me-2">Register</Button>
               <Button onClick={handleLoginClick} variant="outline-primary">Login</Button>
+              <Button onClick={handlePaymentClick} variant="outline-primary">Payment</Button>
             </Nav>
           )}
         </Container>
