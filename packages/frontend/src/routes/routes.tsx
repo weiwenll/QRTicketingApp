@@ -5,6 +5,7 @@ import LoginPage from '../components/Auth/LoginForm';
 import RegisterPage from '../components/Auth/RegisterForm';
 import Completion from '../components/QR/Payment/Completion';
 import Payment from '../components/QR/Payment/Payment';
+import PurchaseTicketForm from '../components/PurchaseTicket/PurchaseTicketForm';
 // import NotFoundPage from './pages/NotFoundPage';
 
 const AppRoutes: React.FC = () => {
@@ -31,6 +32,7 @@ const AppRoutes: React.FC = () => {
       {/* <Route path="*" element={<NotFoundPage />} /> */}
       <Route path="/payment" element={<Payment />} />
       <Route path="/completion" element={<Completion />} />
+      <Route path="/purchaseTicket" element={<PurchaseTicketForm />} />
     </Routes>
   );
 };
