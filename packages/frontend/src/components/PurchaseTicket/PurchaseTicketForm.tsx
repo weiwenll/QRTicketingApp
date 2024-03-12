@@ -1,38 +1,64 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Form, Button } from 'react-bootstrap';
 
-interface IDataStation {
-    stnId: number,
-    stnCode: string,
-    stnName: string
+enum JourneyType {
+  Single = 1,
+  ReturnTicket, 
+  Group
 }
 
-const PurchaseTicketForm: React.FC = () => {
-    const [email, setEmail] = useState<string>('');
-    const [emailError, setEmailError] = useState<string>('');
-    const [error, setError] = useState<string>('');
-    const [success, setSuccess] = useState<boolean>(false);
-    const [station, setStation] = useState<IDataStation[]>([])
-    //const [data, setData] = useState([]);
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        console.log("ticket purchased as user")
-    };
+interface PurchaseTicketRequest {
+  ticketType: number,
+  journeyType: JourneyType,
+  groupSize: number,
+  phoneNo: string,
+  email: string,
+  creationDateTime: Date,
+  effectiveDateTime: Date,
+  startDateTime: Date,
+  endDateTime: Date
+}
 
-    useEffect(() => {
-        const GetPost = async () => {
-          const response = await fetch('http://localhost:2000/tg_query_api/api/v1/routes/GetTrainRoutes', {
-            method: 'GET',
-            headers: {
-              "Content-Type": "application/json"
-            }
-          })
-          const json = await response.json()
-          const responseData = json.ResponseData as IDataStation[]
-          if (response.ok) setStation(responseData)
-        }
-        GetPost()
-      }, [])
+const initialPurchaseTicketRequest: PurchaseTicketRequest = {
+  ticketType: 0,
+  journeyType: 1,
+  groupSize: 0,
+  phoneNo: "",
+  email: "",
+  creationDateTime: new Date(),
+  effectiveDateTime: new Date(),
+  startDateTime: new Date(),
+  endDateTime: new Date()
+};
+
+
+const PurchaseTicketForm: React.FC = () => {
+    const [ purchaseTicketRequest, setPurchaseTicketRequest ] = useState<PurchaseTicketRequest>(initialPurchaseTicketRequest);
+
+    const formOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      console.log('formonchange')
+      const {name, value } = event.target as HTMLInputElement
+      setPurchaseTicketRequest(purchaseTicketRequest => ({
+         ...purchaseTicketRequest, 
+         [name] : value 
+      }));
+
+    }
+
+    const formOnSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      console.log('formonchange')
+      const {name, value } = event.target as HTMLSelectElement
+      setPurchaseTicketRequest(purchaseTicketRequest => ({
+         ...purchaseTicketRequest, 
+         [name] : value 
+      }));
+
+    }
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      console.log("ticket purchased as user")
+    };
 
   return (
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
@@ -42,56 +68,110 @@ const PurchaseTicketForm: React.FC = () => {
           <Form.Label>Email *</Form.Label>
           <Form.Control
             type="email"
+            name='email'
             placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={purchaseTicketRequest.email}
+            onChange={formOnChange}
             required
           />
-           {emailError && <div className="text-danger">{emailError}</div>}
         </Form.Group>
-        <Form.Group controlId="formDestinationFrom" className="mb-3">
-          <Form.Label>Destination From*</Form.Label>
-            <Form.Select aria-label="Default select example">
-                <option>Select Stations</option>
-                {station.map((stn:IDataStation) => {
-                    return <option key={stn.stnId} value={stn.stnId}>{stn.stnName}</option>
-                })}
-            </Form.Select>
-        </Form.Group>
-        <Form.Group controlId="formDestinationTo" className="mb-3">
-          <Form.Label>Destination To**</Form.Label>
-            <Form.Select aria-label="Default select example">
-                <option>Select Stations</option>
-                {station.map((stn:IDataStation) => {
-                    return <option key={stn.stnId} value={stn.stnId}>{stn.stnName}</option>
-                })}
-            </Form.Select>
-        </Form.Group>
-        <Form.Group controlId="DateFrom" className="mb-3">
-          <Form.Label>Email *</Form.Label>
+        <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Label>Phone Number</Form.Label>
           <Form.Control
-            type="email"
+            type="text"
+            name='phoneNo'
             placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={purchaseTicketRequest?.phoneNo}
+            onChange={formOnChange}
             required
           />
-           {emailError && <div className="text-danger">{emailError}</div>}
+        </Form.Group>
+        <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Label>Ticket Type</Form.Label>
+          <Form.Control
+            type="text"
+            name='ticketType'
+            placeholder="Enter your email"
+            value={purchaseTicketRequest?.ticketType}
+            onChange={formOnChange}
+            required
+          />
+        </Form.Group>
+        <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Label>Journey Type</Form.Label>
+          <Form.Select name='journeyType' onSelect={formOnSelect} required aria-label="Default select example">
+            <option>Select Journey Type</option>
+            <option value={JourneyType.Single}>Single</option>
+            <option value={JourneyType.Group}>Group</option>
+            <option value={JourneyType.ReturnTicket}>ReturnTicket</option>
+          </Form.Select>
+        </Form.Group>
+        <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Label>Group Size</Form.Label>
+          <Form.Control
+            type="number"
+            name='groupSize'
+            placeholder="Enter your email"
+            value={purchaseTicketRequest?.groupSize}
+            onChange={formOnChange}
+            required
+          />
+        </Form.Group>
+        <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Label>Creation DateTime</Form.Label>
+          <Form.Control
+            type="text"
+            name='creationDateTime'
+            placeholder="Enter your email"
+            value={purchaseTicketRequest?.creationDateTime.toDateString()}
+            onChange={formOnChange}
+            required
+          />
+        </Form.Group>
+        <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Label>Effective DateTime</Form.Label>
+          <Form.Control
+            type="text"
+            name='effectiveDateTime'
+            placeholder="Enter your email"
+            value={purchaseTicketRequest?.effectiveDateTime.toDateString()}
+            onChange={formOnChange}
+            required
+          />
+        </Form.Group>
+        <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Label>Start DateTime</Form.Label>
+          <Form.Control
+            type="text"
+            name='startDateTime'
+            placeholder="Enter your email"
+            value={purchaseTicketRequest?.startDateTime.toDateString()}
+            onChange={formOnChange}
+            required
+          />
+        </Form.Group>
+        <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Label>End DateTime</Form.Label>
+          <Form.Control
+            type="text"
+            name='endDateTime'
+            placeholder="Enter your email"
+            value={purchaseTicketRequest?.endDateTime.toDateString()}
+            onChange={formOnChange}
+            required
+          />
         </Form.Group>
         <Button variant="primary" type="submit" className="w-100 mb-3">
-          Login
+          Purchase Ticket
         </Button>
-        {error && <div className="alert alert-danger" role="alert">{error}</div>}
-        {success && <div className="alert alert-success" role="alert">Login successful!</div>}
-        <Form.Group className="text-muted text-center">
-          Don't have an account? <a href="/register">Sign Up</a>
-        </Form.Group>
+
       </Form> 
     </Container>
   )
 }
 
 export default PurchaseTicketForm
+
 
 
 

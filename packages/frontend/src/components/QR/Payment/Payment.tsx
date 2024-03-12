@@ -18,7 +18,7 @@ function Payment() {
     const fetchPaymentIntent = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:5500/tg_query_api/api/v1/payments/CreatePaymentIntent",
+          "http://localhost:5000/tg_query_api/api/v1/payments/CreatePaymentIntent",
           {
             email: 'zmt@nus.com',
             currency: 'sgd',
