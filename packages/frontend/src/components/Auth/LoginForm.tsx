@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { loginUser } from '../../services/api';
 
-const RegisterForm: React.FC = () => {
+const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<boolean>(false);
-
+  
   const navigate = useNavigate();
   // Function to validate email format
   const validateEmail = (email: string) => {
@@ -22,7 +22,7 @@ const RegisterForm: React.FC = () => {
   
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    localStorage.removeItem('isAuthenticated');
     setEmailError('');
     setPasswordError('');
     setError('');
@@ -50,12 +50,13 @@ const RegisterForm: React.FC = () => {
       const { accessToken, refreshToken } = data;
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('isAuthenticated', 'true');
       setSuccess(true);
       setError('');
 
       setTimeout(() => {
         navigate('/home', { state: { isAuthenticated: true } });
-      }, 1500);
+      }, 100);
     }).catch(error => {
       console.error(error);
       setError('Login failed. Please try again.'); // TODO: Update error message based on actual API error response
@@ -109,4 +110,4 @@ const RegisterForm: React.FC = () => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

@@ -5,6 +5,8 @@ import LoginPage from '../components/Auth/LoginForm';
 import RegisterPage from '../components/Auth/RegisterForm';
 import Completion from '../components/QR/Payment/Completion';
 import Payment from '../components/QR/Payment/Payment';
+import ViewQRTickets from '../components/QR/Ticket/ViewQRTickets';
+import PurchaseTicket from '../components/QR/Ticket/PurchaseTicket';
 // import NotFoundPage from './pages/NotFoundPage';
 
 const AppRoutes: React.FC = () => {
@@ -28,9 +30,12 @@ const AppRoutes: React.FC = () => {
       <Route path="/" element={<HomePage isAuthenticated={false} />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      {/* <Route path="*" element={<NotFoundPage />} /> */}
-      <Route path="/payment" element={<Payment />} />
+      {/* <Route path="*" element={<NotFoundPage />} /> */}      
       <Route path="/completion" element={<Completion />} />
+      <Route path="/viewQRTickets" element={<ViewQRTickets />} />
+      <Route path="/purchaseTicket" element={<PurchaseTicket />} />
+      <Route path="/payment" element={<Payment />} />
+      
     </Routes>
   );
 };

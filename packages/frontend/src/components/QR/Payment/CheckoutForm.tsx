@@ -1,14 +1,65 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
-import { Button } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import Utils from "../../Utils";
+import axios from "axios";
+import qs from "qs";
 
-export default function CheckoutForm() {
+interface Props {
+  purchaseTicketRequest: {
+    journeyType: number,
+    groupSize: number,
+    operatorId: number,
+    startDatetime: number,
+    endDatetime: number,
+    departurePoint: number,
+    arrivalPoint: number,
+    paymentRefNo: string,
+    amount: number,
+    currency: string,
+    phoneNo: string,
+    email: string
+  }
+}
+
+const CheckoutForm: React.FC<Props> = ({ purchaseTicketRequest }) => {
   const stripe = useStripe();
   const elements = useElements();
-  
+
   const [message, setMessage] = useState<string | undefined>("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [amount, setAmount] = useState<number>(0);
+
+  const fetchFare = async () => {
+    try {
+
+      const params = {
+        srcStnId: 1,
+        destStnId: 2,
+        ticketType: purchaseTicketRequest.journeyType,
+        journeyType: purchaseTicketRequest.journeyType,
+        groupSize: purchaseTicketRequest.groupSize
+      };
+
+      const response = await axios.post(
+        "http://localhost:5500/tg_query_api/api/v1/fares/GetTrainFare",
+        params,
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+      const data = response.data;
+      setAmount(data.ResponseData.fare);
+    } catch (error) {
+      console.error('Error fetching points:', error);
+      // Handle the error appropriately, e.g., display an error message to the user
+    }
+  };
+
+  useEffect(() => {
+    fetchFare();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,7 +76,8 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: `${window.location.origin}/completion`,
+        //return_url: `${window.location.origin}/completion`,
+        return_url: `${window.location.origin}/completion?${qs.stringify(purchaseTicketRequest)}`
       },
     });
 
@@ -39,15 +91,35 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <PaymentElement id="payment-element" />
-      <Button variant="primary" type="submit" className="w-100 mb-3" disabled={isProcessing || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isProcessing ? "Processing ... " : "Pay now"}
-        </span>
-      </Button>
+    <Form id="payment-form" onSubmit={handleSubmit}>
+      <Row className="mb-3">
+        <Col>
+          <Form.Group controlId="formArrivalPoint" className="mb-3">
+            <Form.Label>Arrival Point : {purchaseTicketRequest.arrivalPoint}</Form.Label>
+          </Form.Group>
+          <Form.Group controlId="formArrivalPoint" className="mb-3">
+            <Form.Label>Departure Point : {purchaseTicketRequest.departurePoint}</Form.Label>
+          </Form.Group>
+          <Form.Group controlId="formArrivalPoint" className="mb-3">
+            <Form.Label>Group Size : {purchaseTicketRequest.groupSize}</Form.Label>
+          </Form.Group>
+          <Form.Group controlId="formArrivalPoint" className="mb-3">
+            <Form.Label>JourneyType : {Utils.getJourneyTypeLabel(purchaseTicketRequest.journeyType)}</Form.Label>
+          </Form.Group>
+        </Col>
+        <Col>
+          <PaymentElement id="payment-element" />
+          <Button variant="primary" type="submit" className="w-100 mb-3" disabled={isProcessing || !stripe || !elements} id="submit">
+            <span id="button-text">
+              {isProcessing ? "Processing ... " : `Pay now @ $${amount}`}
+            </span>
+          </Button>
+        </Col>
+      </Row>
       {/* Show any error or success messages */}
       {message && <div id="payment-message">{message}</div>}
-    </form>
+    </Form>
   );
-}
+};
+
+export default CheckoutForm;

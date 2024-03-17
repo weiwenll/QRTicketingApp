@@ -16,9 +16,9 @@ const HomePage: React.FC<HomePageProps> = ({ isAuthenticated }) => {
     navigate('/login');
   };
 
-  const handleRegisterClick = () => navigate('/register');
+const handleRegisterClick = () => navigate('/register');
   const handleLoginClick = () => navigate('/login');
-  const handlePaymentClick = () => navigate('/payment');
+const handlePaymentClick = () => navigate('/payment');
   return (
     <div>
       <Navbar bg="light" expand="lg">
@@ -33,13 +33,13 @@ const HomePage: React.FC<HomePageProps> = ({ isAuthenticated }) => {
             <Nav className="ml-auto">
               <Button onClick={handleRegisterClick} variant="outline-primary" className="me-2">Register</Button>
               <Button onClick={handleLoginClick} variant="outline-primary">Login</Button>
-              <Button onClick={handlePaymentClick} variant="outline-primary">Payment</Button>
-            </Nav>
-          )}
+                  <Button onClick={handlePaymentClick} variant="outline-primary">Payment</Button>
+                                </Nav>
+            )}
         </Container>
       </Navbar>
       <Container style={{ marginTop: '20px' }}>
-        <h1>Welcome to the Homepage</h1>
+            <h1>Welcome to the Homepage</h1>
         <p>This is a simple homepage (to be edited later) and a logout button.</p>
       </Container>
     </div>
