@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { loginUser } from '../../services/api';
+import Layout from '../Layout';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -69,6 +70,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
+    <Layout isAuthenticated={false}>
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
       <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '330px' }}>
         <h3 className="text-center mb-3">Sign in</h3>
@@ -107,6 +109,7 @@ const LoginForm: React.FC = () => {
         </Form.Group>
       </Form>
     </Container>
+    </Layout>
   );
 };
 
