@@ -9,6 +9,7 @@ import ViewQRTickets from '../components/QR/Ticket/ViewQRTickets';
 import PurchaseTicket from '../components/QR/Ticket/PurchaseTicket';
 import Layout  from '../components/Layout';
 import ViewTrainFare from '../components/QR/Fare/ViewTrainFare';
+import LandingPage from '../pages/LandingPage';
 // import NotFoundPage from './pages/NotFoundPage';
 
 const AppRoutes: React.FC = () => {
@@ -28,7 +29,7 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Routes>
-     <Route path="/" element={<Layout isAuthenticated={isAuthenticated}> </Layout>}></Route>
+     <Route path="/" element={<LandingPage isAuthenticated={isAuthenticated}  />} />
       <Route path="/home" element={<HomePage isAuthenticated={isAuthenticated}  />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />

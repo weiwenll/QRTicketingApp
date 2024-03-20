@@ -29,7 +29,7 @@ const HomePage: React.FC<HomePageProps> = ({ isAuthenticated }) => {
 const HomePage: React.FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
   return (
     <Layout isAuthenticated={isAuthenticated}>
-      <main style={{ backgroundImage: `url('mrt2.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: 'calc(100vh - 56px)' }}>
+      <main style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: 'calc(100vh - 56px)' }}>
       
           {/* Add your main content here */}
       <h1>Hello, World!</h1>

@@ -45,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({ title, isAuthenticated }) => {
                   <Link className="nav-link" to="/payment">Payment</Link>
                 </li></>
             ) : (
-              <>
+              /*<>
                <li className="nav-item btn btn-outline-primary" style={{ marginRight: '0.5rem' }}>
                   <Link className="nav-link"  to="/register"> Register</Link>
                 </li>
@@ -53,7 +53,8 @@ const Header: React.FC<HeaderProps> = ({ title, isAuthenticated }) => {
                   <Link className="nav-link" to="/login">Login</Link>
                 </li>
                 
-              </>
+              </> */
+              null
             )}
             {/* Add more navigation links as needed */}
           </ul>

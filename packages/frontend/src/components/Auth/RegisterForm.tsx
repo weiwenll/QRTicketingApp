@@ -97,8 +97,7 @@ const RegisterForm: React.FC = () => {
     navigate('/home', { state: { isAuthenticated: false } });
   };
 
-  return (
-    <Layout isAuthenticated={false}>
+  return (    
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
       <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '330px' }}>
         <h3 className="text-center mb-3">Create an account</h3>
@@ -163,7 +162,6 @@ const RegisterForm: React.FC = () => {
         </Form.Group>
       </Form>
     </Container>
-    </Layout>
   );
 };
 
