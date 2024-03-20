@@ -29,8 +29,8 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Routes>
-     <Route path="/" element={<LandingPage isAuthenticated={isAuthenticated}  />} />
-      <Route path="/home" element={<HomePage isAuthenticated={isAuthenticated}  />} />
+     <Route path="/" element={<LandingPage/>} />
+      <Route path="/home" element={<HomePage/>} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       {/* <Route path="*" element={<NotFoundPage />} /> */}      

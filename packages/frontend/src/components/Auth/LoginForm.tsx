@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { loginUser } from '../../services/api';
-import Layout from '../Layout';
+import { SessionUserData } from '../../services/types';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -23,7 +23,7 @@ const LoginForm: React.FC = () => {
   
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('sessionUserData');
     setEmailError('');
     setPasswordError('');
     setError('');
@@ -44,19 +44,32 @@ const LoginForm: React.FC = () => {
     const userData = {
       email,
       password,
-      "role": "ROLE_USER"
+      "role": "ROLE_USER",
+      isAuthenticated: true
     };
     
+    
+   // Initialize sessionUserData as a SessionUserData object
+    const sessionUserData: SessionUserData = {
+      email: email,
+      role: 'ROLE_USER',
+      accessToken: '',
+      refreshToken: '',
+      isAuthenticated: true
+    };
+
      loginUser(userData).then(data => {
+
       const { accessToken, refreshToken } = data;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('isAuthenticated', 'true');
+      sessionUserData.accessToken=accessToken;
+      sessionUserData.refreshToken=refreshToken;
+      localStorage.setItem('sessionUserData', JSON.stringify(sessionUserData));
+
       setSuccess(true);
       setError('');
 
       setTimeout(() => {
-        navigate('/home', { state: { isAuthenticated: true } });
+        navigate('/home');
       }, 100);
     }).catch(error => {
       console.error(error);
@@ -70,7 +83,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
+    <Container className="d-flex align-items-center justify-content-center">
       <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '330px' }}>
         <h3 className="text-center mb-3">Sign in</h3>
         <Form.Group controlId="formEmail" className="mb-3">

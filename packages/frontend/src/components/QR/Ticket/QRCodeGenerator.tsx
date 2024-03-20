@@ -2,20 +2,9 @@ import React from 'react';
 import QRCode from 'qrcode.react';
 import Utils from '../../Utils';
 import { Button } from 'react-bootstrap';
+import { QRDataProps } from '../../../services/types';
 
-interface Props {
-  qrData: {
-    qrData: string;
-    serialNumber: string;
-    departurePoint: number;
-    arrivalPoint: number;
-    status: number;
-    effectiveDatetime: number;
-    journeyType: number;
-  };
-}
-
-const QRCodeGenerator: React.FC<Props> = ({ qrData }) => {
+const QRCodeGenerator: React.FC<QRDataProps> = ({ qrData }) => {
   const statusLabel = Utils.getStatusLabel(qrData.status);
 
   const downloadQRCode = () => {

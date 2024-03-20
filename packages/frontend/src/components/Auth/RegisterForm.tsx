@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { registerUser } from '../../services/api';
 import Layout from '../Layout';
+import { SessionUserData } from '../../services/types';
 
 const RegisterForm: React.FC = () => {
   const [username, setUsername] = useState<string>('');
@@ -76,16 +77,27 @@ const RegisterForm: React.FC = () => {
       "role": "ROLE_USER"
     };
     
+    // Initialize sessionUserData as a SessionUserData object
+    const sessionUserData: SessionUserData = {
+      email: email,
+      role: 'ROLE_USER',
+      accessToken: '',
+      refreshToken: '',
+      isAuthenticated: true
+    };
+    
      registerUser(userData).then(data => {
       const { accessToken, refreshToken } = data;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      sessionUserData.accessToken=accessToken;
+      sessionUserData.refreshToken=refreshToken;
+      localStorage.setItem('sessionUserData', JSON.stringify(sessionUserData));
+      
       setSuccess(true);
       setError('');
 
       setTimeout(() => {
-        navigate('/home', { state: { isAuthenticated: true } });
-      }, 1500);
+        navigate('/home');
+      }, 100);
     }).catch(error => {
       console.error(error);
       setError('Registration failed. Please try again.'); // TODO: Update error message based on actual API error response
@@ -98,7 +110,7 @@ const RegisterForm: React.FC = () => {
   };
 
   return (    
-    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
+    <Container className="d-flex align-items-center justify-content-center">
       <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '330px' }}>
         <h3 className="text-center mb-3">Create an account</h3>
         <Form.Group controlId="formUsername" className="mb-3">

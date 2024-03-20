@@ -5,25 +5,11 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import Utils from "../../Utils";
 import axios from "axios";
 import qs from "qs";
+import Layout from "../../Layout";
+import { CheckoutProps } from "../../../services/types";
 
-interface Props {
-  purchaseTicketRequest: {
-    journeyType: number,
-    groupSize: number,
-    operatorId: number,
-    startDatetime: number,
-    endDatetime: number,
-    departurePoint: number,
-    arrivalPoint: number,
-    paymentRefNo: string,
-    amount: number,
-    currency: string,
-    phoneNo: string,
-    email: string
-  }
-}
 
-const CheckoutForm: React.FC<Props> = ({ purchaseTicketRequest }) => {
+const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -91,34 +77,36 @@ const CheckoutForm: React.FC<Props> = ({ purchaseTicketRequest }) => {
   };
 
   return (
-    <Form id="payment-form" onSubmit={handleSubmit}>
-      <Row className="mb-3">
-        <Col>
-          <Form.Group controlId="formArrivalPoint" className="mb-3">
-            <Form.Label>Arrival Point : {purchaseTicketRequest.arrivalPoint}</Form.Label>
-          </Form.Group>
-          <Form.Group controlId="formArrivalPoint" className="mb-3">
-            <Form.Label>Departure Point : {purchaseTicketRequest.departurePoint}</Form.Label>
-          </Form.Group>
-          <Form.Group controlId="formArrivalPoint" className="mb-3">
-            <Form.Label>Group Size : {purchaseTicketRequest.groupSize}</Form.Label>
-          </Form.Group>
-          <Form.Group controlId="formArrivalPoint" className="mb-3">
-            <Form.Label>JourneyType : {Utils.getJourneyTypeLabel(purchaseTicketRequest.journeyType)}</Form.Label>
-          </Form.Group>
-        </Col>
-        <Col>
-          <PaymentElement id="payment-element" />
-          <Button variant="primary" type="submit" className="w-100 mb-3" disabled={isProcessing || !stripe || !elements} id="submit">
-            <span id="button-text">
-              {isProcessing ? "Processing ... " : `Pay now @ $${amount}`}
-            </span>
-          </Button>
-        </Col>
-      </Row>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
-    </Form>
+    <Layout>
+      <Form id="payment-form" onSubmit={handleSubmit}>
+        <Row className="mb-3">
+          <Col>
+            <Form.Group controlId="formArrivalPoint" className="mb-3">
+              <Form.Label>Arrival Point : {purchaseTicketRequest.arrivalPoint}</Form.Label>
+            </Form.Group>
+            <Form.Group controlId="formArrivalPoint" className="mb-3">
+              <Form.Label>Departure Point : {purchaseTicketRequest.departurePoint}</Form.Label>
+            </Form.Group>
+            <Form.Group controlId="formArrivalPoint" className="mb-3">
+              <Form.Label>Group Size : {purchaseTicketRequest.groupSize}</Form.Label>
+            </Form.Group>
+            <Form.Group controlId="formArrivalPoint" className="mb-3">
+              <Form.Label>JourneyType : {Utils.getJourneyTypeLabel(purchaseTicketRequest.journeyType)}</Form.Label>
+            </Form.Group>
+          </Col>
+          <Col>
+            <PaymentElement id="payment-element" />
+            <Button variant="primary" type="submit" className="w-100 mb-3" disabled={isProcessing || !stripe || !elements} id="submit">
+              <span id="button-text">
+                {isProcessing ? "Processing ... " : `Pay now @ $${amount}`}
+              </span>
+            </Button>
+          </Col>
+        </Row>
+        {/* Show any error or success messages */}
+        {message && <div id="payment-message">{message}</div>}
+      </Form>
+    </Layout>
   );
 };
 

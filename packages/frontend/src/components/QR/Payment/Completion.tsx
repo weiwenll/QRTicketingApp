@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Layout from "../../Layout";
 
-const Completion: React.FC= () => { 
+const Completion: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +33,7 @@ const Completion: React.FC= () => {
 
   const purchaseTicket = async () => {
     try {
-      const params = { ...paramsObj};
+      const params = { ...paramsObj };
       const response = await axios.post(
         "http://localhost:5500/tg_query_api/api/v1/tickets/PurchaseTicket",
         params,
@@ -57,11 +58,13 @@ const Completion: React.FC= () => {
   }, []);
 
   return (
-    <center>
-      {loading && <h1>Loading...</h1>}
-      {success && <h1>Thank you! 🎉</h1>}
-      {error && <h1>Error: {error}</h1>}
-    </center>
+    <Layout>
+      <center>
+        {loading && <h1>Loading...</h1>}
+        {success && <h1>Thank you! 🎉</h1>}
+        {error && <h1>Error: {error}</h1>}
+      </center>
+    </Layout>
   );
 };
 

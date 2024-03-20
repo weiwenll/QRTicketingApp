@@ -1,3 +1,5 @@
+import { SessionUserData } from "../services/types";
+
 class Utils {
   static millisecondsToDateyyyyMMdd(milliseconds: number): string {
     const date = new Date(milliseconds);
@@ -55,5 +57,12 @@ class Utils {
     }
   }
 }
+
+export const getSessionUserData = (): SessionUserData | null => {
+  const storedSessionUserData = localStorage.getItem('sessionUserData');
+
+  // Parse the string into a SessionUserData object or return null if null/undefined
+  return storedSessionUserData ? JSON.parse(storedSessionUserData) : null;
+};
 
 export default Utils;

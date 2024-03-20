@@ -1,66 +1,56 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { SessionUserData } from '../services/types';
+import { getSessionUserData } from './Utils';
+import { Button, Container, Nav, NavDropdown, Navbar } from 'react-bootstrap';
 
 interface HeaderProps {
   title: string;
-  isAuthenticated: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, isAuthenticated }) => {
+const Header: React.FC<HeaderProps> = ({ title }) => {
+
+  const navigate = useNavigate();
+  //Get session user data
+  const sessionUserData = getSessionUserData();
+
   const handleLogoutClick = () => {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('sessionUserData');
+    navigate('/login');
     // Use `Link` for navigation
   };
 
   return (
-    <header className="navbar navbar-expand-lg navbar-dark bg-dark justify-content-end">
-      <div className="container">
-        <Link className="navbar-brand" to="/">
-          <img src="/logo192.png" alt="Your Logo" height="30" />
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-          <ul className="navbar-nav">
-         
-            {isAuthenticated ? (
-              <>
-                 <li className="nav-item">
-              <Link className="nav-link" to="/home">Home</Link>
-            </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/home" onClick={handleLogoutClick}>
-                  Logout
-                </Link>
-              </li><li className="nav-item">
-                  <Link className="nav-link" to="/payment">Payment</Link>
-                </li></>
-            ) : (
-              /*<>
-               <li className="nav-item btn btn-outline-primary" style={{ marginRight: '0.5rem' }}>
-                  <Link className="nav-link"  to="/register"> Register</Link>
-                </li>
-                <li className="nav-item btn btn-outline-primary">
-                  <Link className="nav-link" to="/login">Login</Link>
-                </li>
-                
-              </> */
-              null
-            )}
-            {/* Add more navigation links as needed */}
-          </ul>
-        </div>
-      </div>
-    </header>
+    <Navbar expand="lg" className='navbar navbar-expand-lg navbar-dark bg-dark justify-content-end'>
+      <Container>
+        <Navbar.Brand href="/">Home Page</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          {sessionUserData?.isAuthenticated === true &&
+            (
+              <Nav className="mr-auto">
+                <NavDropdown title="QR Management" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="/purchaseTicket">Purchase Tickets</NavDropdown.Item>
+                  <NavDropdown.Item href="/viewQRTickets">View Tickets</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown title="User Management" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="/user">User</NavDropdown.Item>
+                  <NavDropdown.Item href="/role">Role</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown title="Fare Management" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="/viewTrainFare">Train Fare</NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+            )
+          }
+          <Nav className="ms-auto">
+            {sessionUserData?.isAuthenticated === true &&(
+              <Button onClick={handleLogoutClick} variant="outline-primary" className="ml-auto">Logout</Button>
+            ) }
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 

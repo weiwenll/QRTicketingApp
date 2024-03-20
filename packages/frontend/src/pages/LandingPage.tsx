@@ -5,9 +5,9 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import LoginForm from '../components/Auth/LoginForm';
 import RegisterForm from '../components/Auth/RegisterForm';
 
-const LandingPage: React.FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
+const LandingPage: React.FC = () => {
   return (
-    <Layout isAuthenticated={isAuthenticated}>
+    <Layout>
       <main
         style={{
           /*backgroundImage: `url(${backgroundImage})`,*/

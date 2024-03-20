@@ -1,16 +1,12 @@
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { LayoutProps } from '../services/types';
 
-interface LayoutProps {
-  isAuthenticated: boolean;
-  children: React.ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ isAuthenticated, children }) => {
+const Layout: React.FC<LayoutProps> = ({children}) => {
   return (
     <div className="App">
-      <Header title='My App' isAuthenticated={isAuthenticated} />
+      <Header title='AFC QR Ticketing System'/>
       {children}
       <Footer />
     </div>
