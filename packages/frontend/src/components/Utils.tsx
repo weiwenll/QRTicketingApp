@@ -41,6 +41,19 @@ class Utils {
         return 'UNSPPORTED';
     }
   }
+
+  static getTicketTypeLabel(status: number): string {
+    switch (status) {
+      case 1:
+        return 'ADULT';
+      case 2:
+        return 'CHILD';
+      case 3:
+        return 'SENIOR';
+      default:
+        return 'UNSPPORTED';
+    }
+  }
 }
 
 export default Utils;

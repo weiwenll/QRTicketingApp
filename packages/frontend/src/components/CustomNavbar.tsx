@@ -31,13 +31,16 @@ const CustomNavbar: React.FC<NavbarProps> = ({ pageTitle, isAuthenticated }) => 
           {userAuthenticated === true &&
             (
               <Nav className="mr-auto">
-                <NavDropdown title="QR" id="basic-nav-dropdown">
+                <NavDropdown title="QR Management" id="basic-nav-dropdown">
                   <NavDropdown.Item href="/purchaseTicket">Purchase Tickets</NavDropdown.Item>
                   <NavDropdown.Item href="/viewQRTickets">View Tickets</NavDropdown.Item>
                 </NavDropdown>
                 <NavDropdown title="User Management" id="basic-nav-dropdown">
                   <NavDropdown.Item href="/user">User</NavDropdown.Item>
                   <NavDropdown.Item href="/role">Role</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown title="Fare Management" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="/viewTrainFare">Train Fare</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
             )

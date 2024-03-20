@@ -19,7 +19,7 @@ const ViewQRTickets: React.FC = () => {
     const fetchData = async () => {
       try {
         const params = {
-          email: 'string@gmail.com'
+          email: 'insaneappcreator@gmail.com'
         };
 
         const response = await axios.get("http://localhost:5500/tg_query_api/api/v1/tickets/Tickets", {
@@ -48,7 +48,7 @@ const ViewQRTickets: React.FC = () => {
   return (
     <div>
       <CustomNavbar pageTitle="View QR Tickets" isAuthenticated={isAuthenticated} />
-      <h3 className="text-center mb-3">Purchase Ticket</h3>
+      <h3 className="text-center mb-3">View Ticket</h3>
       <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '30vh' }}>
         <Table striped bordered hover>
           <thead>

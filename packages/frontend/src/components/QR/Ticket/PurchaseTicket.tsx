@@ -91,7 +91,7 @@ const PurchaseTicket: React.FC = () => {
         purchaseTicketRequest.amount = 100;
         purchaseTicketRequest.currency = "sgd";
         purchaseTicketRequest.phoneNo = "1122334455";
-        purchaseTicketRequest.email = "string@gmail.com";
+        purchaseTicketRequest.email = "insaneappcreator@gmail.com";
         // Navigate to Payment component with state
         navigate('/payment', { state: { purchaseTicketRequest: purchaseTicketRequest } });
 
