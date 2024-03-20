@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
 
   const handleLogoutClick = () => {
     localStorage.removeItem('sessionUserData');
-    navigate('/login');
+    navigate('/');
     // Use `Link` for navigation
   };
 
