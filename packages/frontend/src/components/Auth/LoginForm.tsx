@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, DropdownDivider } from 'react-bootstrap';
 import { loginUser } from '../../services/api';
 import { SessionUserData } from '../../services/types';
 
@@ -84,8 +84,8 @@ const LoginForm: React.FC = () => {
 
   return (
     <Container className="d-flex align-items-center justify-content-center">
-      <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '330px' }}>
-        <h3 className="text-center mb-3">Sign in</h3>
+      <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '330px' }}>        
+        <h4 className="text-center mb-3">Sign in</h4>
         <Form.Group controlId="formEmail" className="mb-3">
           <Form.Label>Email *</Form.Label>
           <Form.Control
@@ -109,13 +109,13 @@ const LoginForm: React.FC = () => {
           {passwordError && <div className="text-danger">{passwordError}</div>}
         </Form.Group>
         <Button variant="primary" type="submit" className="w-100 mb-3">
-          Login
+          Sign In
         </Button>
         {error && <div className="alert alert-danger" role="alert">{error}</div>}
         {success && <div className="alert alert-success" role="alert">Login successful!</div>}
-        <Form.Group className="text-muted text-center">
+        {/*<Form.Group className="text-muted text-center">
           Don't have an account? <a href="/register">Sign Up</a>
-        </Form.Group>
+        </Form.Group>*/}
         <Form.Group className="text-muted text-center mt-3">
         Or continue as a <a href="/home" onClick={handleContinueAsGuest}>Guest</a>
         </Form.Group>

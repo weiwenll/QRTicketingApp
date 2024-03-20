@@ -42,10 +42,10 @@ const LandingPage: React.FC = () => {
                 <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '5px',}}>
                   <Nav variant="tabs">
                     <Nav.Item>
-                      <Nav.Link eventKey="login">Login</Nav.Link>
+                      <Nav.Link eventKey="login">Sign In</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                      <Nav.Link eventKey="register">Register</Nav.Link>
+                      <Nav.Link eventKey="register">Sign Up</Nav.Link>
                     </Nav.Item>
                   </Nav>
                   <Tab.Content>

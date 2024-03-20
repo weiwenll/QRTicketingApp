@@ -77,7 +77,6 @@ const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
   };
 
   return (
-    <Layout>
       <Form id="payment-form" onSubmit={handleSubmit}>
         <Row className="mb-3">
           <Col>
@@ -106,7 +105,6 @@ const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
         {/* Show any error or success messages */}
         {message && <div id="payment-message">{message}</div>}
       </Form>
-    </Layout>
   );
 };
 

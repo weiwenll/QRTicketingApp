@@ -162,13 +162,13 @@ const RegisterForm: React.FC = () => {
         </Form.Group> */}
         
         <Button variant="primary" type="submit" className="w-100 mb-3">
-          Register
+          Sign Up
         </Button>
         {error && <div className="alert alert-danger" role="alert">{error}</div>}
         {success && <div className="alert alert-success" role="alert">Registration successful!</div>}
-        <Form.Group className="text-muted text-center">
+        {/*<Form.Group className="text-muted text-center">
           Already have an account? <a href="/login">Sign in</a>
-        </Form.Group>
+      </Form.Group> */}
         <Form.Group className="text-muted text-center mt-3">
         Or continue as a <a href="/home" onClick={handleContinueAsGuest}>Guest</a>
         </Form.Group>
