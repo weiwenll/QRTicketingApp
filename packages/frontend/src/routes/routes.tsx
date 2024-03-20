@@ -7,6 +7,7 @@ import Completion from '../components/QR/Payment/Completion';
 import Payment from '../components/QR/Payment/Payment';
 import ViewQRTickets from '../components/QR/Ticket/ViewQRTickets';
 import PurchaseTicket from '../components/QR/Ticket/PurchaseTicket';
+import ViewTrainFare from '../components/QR/Fare/ViewTrainFare';
 // import NotFoundPage from './pages/NotFoundPage';
 
 const AppRoutes: React.FC = () => {
@@ -35,6 +36,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/viewQRTickets" element={<ViewQRTickets />} />
       <Route path="/purchaseTicket" element={<PurchaseTicket />} />
       <Route path="/payment" element={<Payment />} />
+      <Route path="/viewTrainFare" element={<ViewTrainFare />} />
       
     </Routes>
   );
