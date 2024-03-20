@@ -3,9 +3,10 @@ import { Container, Navbar, Nav, Button } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import backgroundImage from '../assets/background.webp';
 // import ModalForm from '../components/ModalForm';
+import Layout from '../components/Layout';
 import CustomNavbar from '../components/CustomNavbar';
 
-interface HomePageProps {
+/* interface HomePageProps {
   isAuthenticated: boolean;
 }
 
@@ -23,6 +24,20 @@ const HomePage: React.FC<HomePageProps> = ({ isAuthenticated }) => {
       </Container>
     </div>
   );
-}
+} */
+
+const HomePage: React.FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
+  return (
+    <Layout isAuthenticated={isAuthenticated}>
+      <main style={{ backgroundImage: `url('mrt2.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: 'calc(100vh - 56px)' }}>
+      
+          {/* Add your main content here */}
+      <h1>Hello, World!</h1>
+      <p>This is the main content area.</p>
+    </main>
+    </Layout>
+  );
+};
+
 
 export default HomePage;

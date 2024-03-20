@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { registerUser } from '../../services/api';
+import Layout from '../Layout';
 
 const RegisterForm: React.FC = () => {
   const [username, setUsername] = useState<string>('');
@@ -97,6 +98,7 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
+    <Layout isAuthenticated={false}>
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
       <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '330px' }}>
         <h3 className="text-center mb-3">Create an account</h3>
@@ -161,6 +163,7 @@ const RegisterForm: React.FC = () => {
         </Form.Group>
       </Form>
     </Container>
+    </Layout>
   );
 };
 
