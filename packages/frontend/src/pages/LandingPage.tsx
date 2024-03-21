@@ -28,7 +28,7 @@ const LandingPage: React.FC = () => {
           }}
         ></div>
         
-        <Container style={{ position: 'relative', zIndex: 1 }}>
+        <Container style={{ position: 'relative', zIndex: 1,marginTop : '50px' }}>
           <Tab.Container id="login-register-tabs" defaultActiveKey="login">
             <Row>
               <Col sm={8}>
