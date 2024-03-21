@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button, DropdownDivider } from 'react-bootstrap';
-import { loginUser } from '../../services/api';
 import { SessionUserData } from '../../services/types';
+import { loginUser } from '../../services/ApiUtils';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');

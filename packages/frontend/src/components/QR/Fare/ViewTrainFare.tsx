@@ -4,6 +4,7 @@ import { Container, Table, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import Utils from '../../Utils';
 import Layout from '../../Layout';
+import { ApiMethod, fetchDataWithoutParam } from '../../../services/ApiUtils';
 
 const ViewTrainFare: React.FC = () => {
   const navigate = useNavigate();
@@ -19,8 +20,8 @@ const ViewTrainFare: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:5500/tg_query_api/api/v1/fares/GetAllTrainFare");
+      try {        
+        const response = await fetchDataWithoutParam(ApiMethod.GETALLTRAINFARE);
         setDataList(response.data.ResponseData); // Set the entire response data
         setTicketTypes(ticketTypeList);
 
@@ -41,7 +42,7 @@ const ViewTrainFare: React.FC = () => {
             <thead>
               <tr>
                 <th>Source Station</th>
-                <th>Destination StnId</th>
+                <th>Destination Station</th>
                 <th>Ticket Type</th>
                 <th>Fare($)</th>
               </tr>

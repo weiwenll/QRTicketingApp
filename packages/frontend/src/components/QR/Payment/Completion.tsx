@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Layout from "../../Layout";
+import { ApiMethod, postDataByParams } from "../../../services/ApiUtils";
 
 const Completion: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -34,9 +35,7 @@ const Completion: React.FC = () => {
   const purchaseTicket = async () => {
     try {
       const params = { ...paramsObj };
-      const response = await axios.post(
-        "http://localhost:5500/tg_query_api/api/v1/tickets/PurchaseTicket",
-        params,
+      const response = await postDataByParams(ApiMethod.PURCHASETICKET, params,
         {
           headers: { "Content-Type": "application/json" }
         }

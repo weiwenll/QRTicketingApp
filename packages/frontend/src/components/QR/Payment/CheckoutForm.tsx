@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import Utils from "../../Utils";
-import axios from "axios";
 import qs from "qs";
-import Layout from "../../Layout";
 import { CheckoutProps } from "../../../services/types";
+import { ApiMethod, postDataByParams } from "../../../services/ApiUtils";
 
 
 const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
@@ -15,9 +14,9 @@ const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
 
   const [message, setMessage] = useState<string | undefined>("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [amount, setAmount] = useState<number>(0);
+  //const [amount, setAmount] = useState<number>(0);
 
-  const fetchFare = async () => {
+  /*const fetchFare = async () => {
     try {
 
       const params = {
@@ -28,8 +27,7 @@ const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
         groupSize: purchaseTicketRequest.groupSize
       };
 
-      const response = await axios.post(
-        "http://localhost:5500/tg_query_api/api/v1/fares/GetTrainFare",
+      const response = await postDataByParams(ApiMethod.GETTRAINFARE,
         params,
         {
           headers: { "Content-Type": "application/json" }
@@ -41,11 +39,11 @@ const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
       console.error('Error fetching points:', error);
       // Handle the error appropriately, e.g., display an error message to the user
     }
-  };
+  }; 
 
   useEffect(() => {
     fetchFare();
-  }, []);
+  }, []);*/
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -97,7 +95,7 @@ const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
             <PaymentElement id="payment-element" />
             <Button variant="primary" type="submit" className="w-100 mb-3" disabled={isProcessing || !stripe || !elements} id="submit">
               <span id="button-text">
-                {isProcessing ? "Processing ... " : `Pay now @ $${amount}`}
+                {isProcessing ? "Processing ... " : `Pay now @ $${purchaseTicketRequest.amount}`}
               </span>
             </Button>
           </Col>

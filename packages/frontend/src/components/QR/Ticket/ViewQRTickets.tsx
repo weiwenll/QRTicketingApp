@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Container, Table, Button, Modal } from 'react-bootstrap';
-import axios from 'axios';
 import QRCodeGenerator from './QRCodeGenerator';
-import CustomNavbar from '../../CustomNavbar';
 import Utils, { getSessionUserData } from '../../Utils';
 import Layout from '../../Layout';
+import { ApiMethod, fetchDataByParam } from '../../../services/ApiUtils';
 
 const ViewQRTickets: React.FC = () => {
-  const navigate = useNavigate();
+
   const [qrDataList, setQRDataList] = useState<any[]>([]);
   const [showQRPopup, setShowQRPopup] = useState(false);
   const [selectedQRData, setSelectedQRData] = useState<any>(null);
@@ -22,7 +20,7 @@ const ViewQRTickets: React.FC = () => {
           email: 'insaneappcreator@gmail.com'
         };
 
-        const response = await axios.get("http://localhost:5500/tg_query_api/api/v1/tickets/Tickets", {
+        const response = await fetchDataByParam(ApiMethod.GETTICKETS, {
           params
         });
 

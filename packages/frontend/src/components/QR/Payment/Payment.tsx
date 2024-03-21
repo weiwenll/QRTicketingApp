@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import CustomNavbar from "../../CustomNavbar";
 import { getSessionUserData } from "../../Utils";
 import Layout from "../../Layout";
+import { ApiMethod, postDataByParams } from "../../../services/ApiUtils";
 
 const Payment: React.FC = () => {
 
@@ -22,40 +23,68 @@ const Payment: React.FC = () => {
 
   //Get session user data
   const sessionUserData = getSessionUserData();
+  const [amount, setAmount] = useState<number>(0);
+
+  const fetchFare = async () => {
+    try {
+      const params = {
+        srcStnId: 1,
+        destStnId: 2,
+        ticketType: purchaseTicketRequest.journeyType,
+        journeyType: purchaseTicketRequest.journeyType,
+        groupSize: purchaseTicketRequest.groupSize
+      };
+
+      const response = await postDataByParams(ApiMethod.GETTRAINFARE,
+        params,
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+
+      const data = response.data;
+      setAmount(data.ResponseData.fare);
+      return data.ResponseData.fare; // Return the fare amount for use in fetchPaymentIntent()
+    } catch (error) {
+      console.error('Error fetching points:', error);
+      // Handle the error appropriately, e.g., display an error message to the user
+    }
+  };
+
+  const fetchPaymentIntent = async (amount: number) => {
+    try {
+      const response = await postDataByParams(ApiMethod.CREATEPAYMENTINTENT,
+        {
+          email: sessionUserData?.email,
+          currency: purchaseTicketRequest.currency,
+          allowFutureUsage: true,
+          amount: amount * 100
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+
+      setClientSecret(response.data.ResponseData.clientSecret);
+      setPaymentIntentId(response.data.ResponseData.paymentIntentId);
+      purchaseTicketRequest.paymentRefNo = response.data.ResponseData.paymentIntentId;
+      purchaseTicketRequest.amount = amount;
+
+    } catch (error) {
+      console.error("Error fetching payment intent:", error);
+      // Handle error gracefully, e.g., display an error message to the user
+    }
+  };
 
   useEffect(() => {
-
-    console.log("use effect ");
-
-    const fetchPaymentIntent = async () => {
-      try {
-        const response = await axios.post(
-          "http://localhost:5500/tg_query_api/api/v1/payments/CreatePaymentIntent",
-          {
-            email: sessionUserData?.email,
-            currency: purchaseTicketRequest.currency,
-            allowFutureUsage: true,
-            amount: 100
-          },
-          {
-            headers: { "Content-Type": "application/json" }
-          }
-        );
-
-        setClientSecret(response.data.ResponseData.clientSecret);
-        setPaymentIntentId(response.data.ResponseData.paymentIntentId);
-        purchaseTicketRequest.paymentRefNo = response.data.ResponseData.paymentIntentId;
-      } catch (error) {
-        console.error("Error fetching payment intent:", error);
-        // Handle error gracefully, e.g., display an error message to the user
+    const fetchDataAndPaymentIntent = async () => {
+      const fareAmount = await fetchFare();
+      if (fareAmount) {
+        fetchPaymentIntent(fareAmount);
       }
-      setHasFetchedPaymentIntent(true);
     };
-
-    if (!hasFetchedPaymentIntent) {
-      fetchPaymentIntent();
-    }
-  }, [hasFetchedPaymentIntent]);
+    fetchDataAndPaymentIntent();
+  }, []);  
 
   return (
     <Layout>

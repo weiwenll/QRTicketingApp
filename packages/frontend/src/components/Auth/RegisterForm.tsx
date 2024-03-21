@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
-import { registerUser } from '../../services/api';
-import Layout from '../Layout';
+import { registerUser } from '../../services/ApiUtils';
 import { SessionUserData } from '../../services/types';
 
 const RegisterForm: React.FC = () => {

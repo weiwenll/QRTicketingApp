@@ -5,6 +5,7 @@ import CustomNavbar from '../../CustomNavbar';
 import axios from 'axios';
 import Layout from '../../Layout';
 import { getSessionUserData } from '../../Utils';
+import { ApiMethod, fetchDataWithoutParam } from '../../../services/ApiUtils';
 
 const PurchaseTicket: React.FC = () => {
 
@@ -13,7 +14,7 @@ const PurchaseTicket: React.FC = () => {
     const sessionUserData = getSessionUserData();
 
     const [journeyType, setJourneyType] = useState<number>(0);
-    const [groupSize, setGroupSize] = useState<number>(0);
+    const [groupSize, setGroupSize] = useState<number>(1);
     const [operatorId, setOperatorId] = useState<number>(0);
     const [startDatetime, setStartDatetime] = useState<number>(0);
     const [endDatetime, setEndDatetime] = useState<number>(0);
@@ -43,8 +44,8 @@ const PurchaseTicket: React.FC = () => {
     ];    
 
     const fetchPoints = async () => {
-        try {
-            const response = await axios.get('http://localhost:5500/tg_query_api/api/v1/routes/GetTrainRoutes'); // Replace with your actual API endpoint
+        try {            
+            const response = await fetchDataWithoutParam(ApiMethod.GETTRAINROUTES);
             const data = response.data;
             setDeparturePoints(data.ResponseData);
             setArrivalPoints(data.ResponseData);
@@ -127,6 +128,7 @@ const PurchaseTicket: React.FC = () => {
                                         placeholder="Enter Group Size"
                                         value={groupSize}
                                         onChange={(e) => setGroupSize(parseInt(e.target.value))}
+                                        min={1} // Set the minimum value to 1
                                         required
                                     />
                                 </Form.Group>
