@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Button, Modal } from 'react-bootstrap';
+import { Container, Table, Button, Modal, Pagination } from 'react-bootstrap';
 import QRCodeGenerator from './QRCodeGenerator';
 import Utils, { getSessionUserData } from '../../Utils';
 import Layout from '../../Layout';
@@ -10,6 +10,10 @@ const ViewQRTickets: React.FC = () => {
   const [qrDataList, setQRDataList] = useState<any[]>([]);
   const [showQRPopup, setShowQRPopup] = useState(false);
   const [selectedQRData, setSelectedQRData] = useState<any>(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5); // You can adjust the number of items per page as needed
+
   //Get session user data
   const sessionUserData = getSessionUserData();
 
@@ -17,7 +21,7 @@ const ViewQRTickets: React.FC = () => {
     const fetchData = async () => {
       try {
         const params = {
-          email: 'insaneappcreator@gmail.com'
+          email: sessionUserData?.email
         };
 
         const response = await fetchDataByParam(ApiMethod.GETTICKETS, {
@@ -33,6 +37,10 @@ const ViewQRTickets: React.FC = () => {
 
     fetchData();
   }, []);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = qrDataList.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleCloseQRPopup = () => {
     setShowQRPopup(false);
@@ -61,7 +69,7 @@ const ViewQRTickets: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {qrDataList.map((qrData, index) => (
+              {currentItems.map((qrData, index) => (
                 <tr key={index}>
                   <td>{qrData.serialNumber}</td>
                   <td>{qrData.departurePoint}</td>
@@ -82,6 +90,24 @@ const ViewQRTickets: React.FC = () => {
                 </tr>
               ))}
             </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan={7}>
+                  <Pagination className="d-flex justify-content-center">
+                    <Pagination.Prev disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)} />
+                    {Array.from({ length: Math.ceil(qrDataList.length / itemsPerPage) }, (_, index) => (
+                      <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => setCurrentPage(index + 1)}>
+                        {index + 1}
+                      </Pagination.Item>
+                    ))}
+                    <Pagination.Next
+                      disabled={currentPage === Math.ceil(qrDataList.length / itemsPerPage)}
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                    />
+                  </Pagination>
+                </td>
+              </tr>
+            </tfoot>
           </Table>
 
           <Modal show={showQRPopup} onHide={handleCloseQRPopup}>

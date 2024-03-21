@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Table, Button, Modal } from 'react-bootstrap';
+import { Container, Table, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 import Utils from '../../Utils';
 import Layout from '../../Layout';
@@ -10,6 +10,8 @@ const ViewTrainFare: React.FC = () => {
   const navigate = useNavigate();
   const [dataList, setDataList] = useState<any[]>([]);
   const [ticketTypes, setTicketTypes] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // You can adjust the number of items per page as needed
 
   const ticketTypeList = [
     { id: 1, name: 'ADULT' },
@@ -20,7 +22,7 @@ const ViewTrainFare: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {        
+      try {
         const response = await fetchDataWithoutParam(ApiMethod.GETALLTRAINFARE);
         setDataList(response.data.ResponseData); // Set the entire response data
         setTicketTypes(ticketTypeList);
@@ -32,6 +34,10 @@ const ViewTrainFare: React.FC = () => {
 
     fetchData();
   }, []);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = dataList.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <Layout>
@@ -48,7 +54,7 @@ const ViewTrainFare: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {dataList.map((data, index) => (
+              {currentItems.map((data, index) => (
                 <tr key={index}>
                   <td>{data.sourceStation.stnFullName}</td>
                   <td>{data.destinationStation.stnFullName}</td>
@@ -57,10 +63,29 @@ const ViewTrainFare: React.FC = () => {
                 </tr>
               ))}
             </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan={4}>
+                  <Pagination className="d-flex justify-content-center">
+                    <Pagination.Prev disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)} />
+                    {Array.from({ length: Math.ceil(dataList.length / itemsPerPage) }, (_, index) => (
+                      <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => setCurrentPage(index + 1)}>
+                        {index + 1}
+                      </Pagination.Item>
+                    ))}
+                    <Pagination.Next
+                      disabled={currentPage === Math.ceil(dataList.length / itemsPerPage)}
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                    />
+                  </Pagination>
+                </td>
+              </tr>
+            </tfoot>
           </Table>
         </Container>
       </div>
     </Layout>
   );
-}
+};
+
 export default ViewTrainFare;
