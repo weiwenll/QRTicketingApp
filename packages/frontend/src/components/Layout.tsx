@@ -7,6 +7,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
   return (
     <div className="App">
       <Header title='AFC QR Ticketing System'/>
+      <div style={{marginTop: '100px'}}></div>
       {children}
       <Footer />
     </div>
