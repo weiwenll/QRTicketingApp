@@ -15,6 +15,7 @@ export enum ApiMethod {
   GETTRAINFARE = 'fares/GetTrainFare',
   PURCHASETICKET = 'tickets/PurchaseTicket',
   CREATEPAYMENTINTENT = 'payments/CreatePaymentIntent',
+  GETUSERS = 'users/GetUsers',
   // Add more endpoints as needed
 }
 

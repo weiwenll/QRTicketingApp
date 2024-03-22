@@ -1,6 +1,13 @@
 import { SessionUserData } from "../services/types";
 
 class Utils {
+
+  static Role = {
+    ROLE_ADMIN: 'ROLE_ADMIN',
+    ROLE_USER: 'ROLE_USER',
+    ROLE_OPERATOR: 'ROLE_OPERATOR',
+  };
+
   static millisecondsToDateyyyyMMdd(milliseconds: number): string {
     const date = new Date(milliseconds);
     const year = date.getFullYear();
@@ -13,47 +20,47 @@ class Utils {
   static getStatusLabel(status: number): string {
     switch (status) {
       case 1:
-        return 'ACTIVE';
+        return 'Active';
       case 2:
-        return 'ENTRY';
+        return 'Entry';
       case 3:
-        return 'EXIT';
+        return 'Exit';
       case 4:
-        return 'ENTRY_UPGRADE';
+        return 'Entry Upgrade';
       case 5:
-        return 'EXIT_UPGRADE';
+        return 'Exit Upgrade';
       case 6:
-        return 'CANCELED';
+        return 'Cancel';
       case 7:
-        return 'REFUNDED';
+        return 'Refund';
       default:
-        return 'INACTIVE';
+        return 'Inactive';
     }
   }
 
   static getJourneyTypeLabel(status: number): string {
     switch (status) {
       case 1:
-        return 'SINGLE';
+        return 'Single Journey';
       case 2:
-        return 'RETURN_TICKET';
+        return 'Return Ticket';
       case 3:
-        return 'GROUP';
+        return 'Group Ticket';
       default:
-        return 'UNSPPORTED';
+        return 'Unspported';
     }
   }
 
   static getTicketTypeLabel(status: number): string {
     switch (status) {
       case 1:
-        return 'ADULT';
+        return 'Adult';
       case 2:
-        return 'CHILD';
+        return 'Child';
       case 3:
-        return 'SENIOR';
+        return 'Senior';
       default:
-        return 'UNSPPORTED';
+        return 'Unspported';
     }
   }
 }

@@ -74,7 +74,11 @@ const ViewQRTickets: React.FC = () => {
                   <td>{qrData.serialNumber}</td>
                   <td>{qrData.departurePoint}</td>
                   <td>{qrData.arrivalPoint}</td>
-                  <td>{Utils.getStatusLabel(qrData.status)}</td>
+                  <td>
+                    <span className= {qrData.status === 1 ? "badge bg-success" : "badge bg-secondary"}>
+                      {Utils.getStatusLabel(qrData.status)}
+                    </span>
+                  </td>
                   <td>{Utils.millisecondsToDateyyyyMMdd(qrData.effectiveDatetime)}</td>
                   <td>{Utils.getJourneyTypeLabel(qrData.journeyType)}</td>
                   <td>

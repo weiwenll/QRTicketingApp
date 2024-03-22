@@ -52,7 +52,8 @@ const LoginForm: React.FC = () => {
    // Initialize sessionUserData as a SessionUserData object
     const sessionUserData: SessionUserData = {
       email: email,
-      role: 'ROLE_USER',
+      role: '',
+      userName: '',
       accessToken: '',
       refreshToken: '',
       isAuthenticated: true
@@ -60,9 +61,12 @@ const LoginForm: React.FC = () => {
 
      loginUser(userData).then(data => {
 
-      const { accessToken, refreshToken } = data;
+      const { accessToken, refreshToken, userName, email, role } = data;
       sessionUserData.accessToken=accessToken;
       sessionUserData.refreshToken=refreshToken;
+      sessionUserData.userName=userName;
+      sessionUserData.email=email;
+      sessionUserData.role=role;
       localStorage.setItem('sessionUserData', JSON.stringify(sessionUserData));
 
       setSuccess(true);

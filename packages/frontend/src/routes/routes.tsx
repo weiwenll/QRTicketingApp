@@ -10,6 +10,7 @@ import PurchaseTicket from '../components/QR/Ticket/PurchaseTicket';
 import Layout  from '../components/Layout';
 import ViewTrainFare from '../components/QR/Fare/ViewTrainFare';
 import LandingPage from '../pages/LandingPage';
+import ViewUser from '../components/Auth/ViewUser';
 // import NotFoundPage from './pages/NotFoundPage';
 
 const AppRoutes: React.FC = () => {
@@ -39,6 +40,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/purchaseTicket" element={<PurchaseTicket />} />
       <Route path="/payment" element={<Payment />} />
       <Route path="/viewTrainFare" element={<ViewTrainFare />} />
+      <Route path="/viewUser" element={<ViewUser />} />
       
     </Routes>
   );
