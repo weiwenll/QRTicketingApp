@@ -55,7 +55,7 @@ const ViewQRTickets: React.FC = () => {
     <Layout>
       <div>
         <h3 className="text-center mb-3">View Ticket</h3>
-        <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '30vh' }}>
+        <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '30vh'}}>
           <Table striped bordered hover>
             <thead>
               <tr>

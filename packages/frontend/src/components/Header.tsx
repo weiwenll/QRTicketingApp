@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
       <Container>
         <Navbar.Brand href="/"> <img
             src={logo} // Use your logo image source
-            height="40"
+            height="30"
             className="d-inline-block align-top"
             alt="Logo"
           /></Navbar.Brand>
