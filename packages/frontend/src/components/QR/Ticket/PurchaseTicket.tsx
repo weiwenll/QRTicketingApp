@@ -103,7 +103,7 @@ const PurchaseTicket: React.FC = () => {
     return (
         <Layout>
             <div>
-                <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '30vh' }}>
+                <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '30vh', marginTop: '100px'}}>
                     <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '500px' }}>
                         <h3 className="text-center mb-3">Purchase Ticket</h3>
                         <Row className="mb-3">

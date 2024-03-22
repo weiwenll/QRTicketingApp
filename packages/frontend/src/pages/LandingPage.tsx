@@ -4,6 +4,7 @@ import backgroundImage from '../assets/background.webp';
 import { Container, Row, Col, Tab, Nav } from 'react-bootstrap';
 import LoginForm from '../components/Auth/LoginForm';
 import RegisterForm from '../components/Auth/RegisterForm';
+import animatedImage from '../assets/home.png';
 
 const LandingPage: React.FC = () => {
   return (
@@ -17,6 +18,27 @@ const LandingPage: React.FC = () => {
           padding: '20px', // Added padding for better spacing
         }}
       >
+          <style>
+          {`
+            .text-animation h2 {
+              display: block;
+              opacity: 0;
+              animation: fadeInOut 5s infinite;
+            }
+
+            @keyframes fadeInOut {
+              0% {
+                opacity: 0;
+              }
+              50% {
+                opacity: 1;
+              }
+              100% {
+                opacity: 0;
+              }
+            }
+          `}
+        </style>
         <div
           style={{
             position: 'absolute',
@@ -34,8 +56,10 @@ const LandingPage: React.FC = () => {
               <Col sm={8}>
                 {/* Content on the left side */}
                 <div>
-                  <h2>Welcome</h2>
-                  <p>This is some content on the left side.</p>
+                  <div className="text-animation">
+                    <h2 style={{ fontSize: '5em',color:'#00285a',marginTop:'60px'}}>SQRT </h2> 
+                    <h2 style={{ fontSize: 'em', color: '#b65515' }}>for Seamless QR Ticketing System</h2>
+                  </div>
                 </div>
               </Col>
               <Col sm={4}>
