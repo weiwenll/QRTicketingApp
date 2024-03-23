@@ -16,6 +16,7 @@ const LandingPage: React.FC = () => {
           backgroundSize: 'cover',
           minHeight: 'calc(100vh - 56px)',
           padding: '20px', // Added padding for better spacing
+          marginTop: '-50px' 
         }}
       >
           <style>
@@ -50,7 +51,7 @@ const LandingPage: React.FC = () => {
           }}
         ></div>
         
-        <Container style={{ position: 'relative', zIndex: 1,marginTop : '50px' }}>
+        <Container style={{ position: 'relative', zIndex: 1}}>
           <Tab.Container id="login-register-tabs" defaultActiveKey="login">
             <Row>
               <Col sm={8}>
