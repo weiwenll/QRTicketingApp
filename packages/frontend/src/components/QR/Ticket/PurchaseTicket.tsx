@@ -31,20 +31,22 @@ const PurchaseTicket: React.FC = () => {
 
     const [departurePoints, setDeparturePoints] = useState<any[]>([]);
     const [arrivalPoints, setArrivalPoints] = useState<any[]>([]);
-
     const [journeyTypes, setJourneyTypes] = useState<any[]>([]);
+
+    const [departurePointDes, setDeparturePointDes] = useState<string>('');
+    const [arrivalPointDes, setArrivalPointDes] = useState<string>('');
 
     const navigate = useNavigate();
 
     const journeyTypeList = [
-        { id: 1, name: 'SINGLE' },
-        { id: 2, name: 'RETURN_TICKET' },
-        { id: 3, name: 'GROUP' }
+        { id: 1, name: 'Single Journey' },
+        { id: 2, name: 'Return Ticket' },
+        { id: 3, name: 'Group Ticket' }
         // Add more items as needed
-    ];    
+    ];
 
     const fetchPoints = async () => {
-        try {            
+        try {
             const response = await fetchDataWithoutParam(ApiMethod.GETTRAINROUTES);
             const data = response.data;
             setDeparturePoints(data.ResponseData);
@@ -84,6 +86,8 @@ const PurchaseTicket: React.FC = () => {
             endDatetime,
             departurePoint,
             arrivalPoint,
+            departurePointDes,
+            arrivalPointDes,
             paymentRefNo,
             amount,
             currency,
@@ -103,7 +107,7 @@ const PurchaseTicket: React.FC = () => {
     return (
         <Layout>
             <div>
-                <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '30vh', marginTop: '100px'}}>
+                <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '30vh', marginTop: '100px' }}>
                     <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '500px' }}>
                         <h3 className="text-center mb-3">Purchase Ticket</h3>
                         <Row className="mb-3">
@@ -170,7 +174,13 @@ const PurchaseTicket: React.FC = () => {
                             <Col>
                                 <Form.Group controlId="formDeparturePoint" className="mb-3">
                                     <Form.Label>Departure Point *</Form.Label>
-                                    <Form.Select value={departurePoint} onChange={(e) => setDeparturePoint(parseInt(e.target.value))} required>
+                                    <Form.Select value={departurePoint} onChange={(e) => {
+                                        setDeparturePoint(parseInt(e.target.value));
+                                        const selectedDeparturePoint = departurePoints.find(point => point.stnId === parseInt(e.target.value));
+                                        if (selectedDeparturePoint) {
+                                            setDeparturePointDes(selectedDeparturePoint.stnName);
+                                        }
+                                    }} required>
                                         <option value="">Select Departure</option>
                                         {departurePoints.map((point) => (
                                             <option key={point.stnId} value={point.stnId}>
@@ -183,9 +193,13 @@ const PurchaseTicket: React.FC = () => {
                             <Col>
                                 <Form.Group controlId="formArrivalPoint" className="mb-3">
                                     <Form.Label>Arrival Point *</Form.Label>
-                                    <Form.Select value={arrivalPoint} onChange={(e) =>
+                                    <Form.Select value={arrivalPoint} onChange={(e) =>{
                                         setArrivalPoint(parseInt(e.target.value))
-                                    } required>
+                                        const selectedArrivalPoint = arrivalPoints.find(point => point.stnId === parseInt(e.target.value));
+                                        if (selectedArrivalPoint) {
+                                            setArrivalPointDes(selectedArrivalPoint.stnName);
+                                        }
+                                    }} required>
                                         <option value="">Select Arrival</option>
                                         {arrivalPoints.map((point) => (
                                             <option key={point.stnId} value={point.stnId}>

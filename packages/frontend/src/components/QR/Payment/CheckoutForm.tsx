@@ -77,12 +77,12 @@ const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
   return (
       <Form id="payment-form" onSubmit={handleSubmit}>
         <Row className="mb-3">
-          <Col>
+          <Col>            
             <Form.Group controlId="formArrivalPoint" className="mb-3">
-              <Form.Label>Arrival Point : {purchaseTicketRequest.arrivalPoint}</Form.Label>
+              <Form.Label>Departure Point : {purchaseTicketRequest.departurePointDes}</Form.Label>
             </Form.Group>
             <Form.Group controlId="formArrivalPoint" className="mb-3">
-              <Form.Label>Departure Point : {purchaseTicketRequest.departurePoint}</Form.Label>
+              <Form.Label>Arrival Point : {purchaseTicketRequest.arrivalPointDes}</Form.Label>
             </Form.Group>
             <Form.Group controlId="formArrivalPoint" className="mb-3">
               <Form.Label>Group Size : {purchaseTicketRequest.groupSize}</Form.Label>

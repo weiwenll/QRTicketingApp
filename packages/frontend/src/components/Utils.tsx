@@ -30,9 +30,9 @@ class Utils {
       case 5:
         return 'Exit Upgrade';
       case 6:
-        return 'Cancel';
+        return 'Cancelled';
       case 7:
-        return 'Refund';
+        return 'Refunded';
       default:
         return 'Inactive';
     }

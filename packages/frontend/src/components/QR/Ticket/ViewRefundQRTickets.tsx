@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Button, Modal, Pagination } from 'react-bootstrap';
-import QRCodeGenerator from './QRCodeGenerator';
+import { Container, Table, Button, Modal, Pagination, Row } from 'react-bootstrap';
 import Utils, { getSessionUserData } from '../../Utils';
 import Layout from '../../Layout';
 import { ApiMethod, fetchDataByParam } from '../../../services/ApiUtils';
-
-const ViewQRTickets: React.FC = () => {
+import RefundConfirmation from './RefundConfirmation';
+const ViewRefundQRTickets: React.FC = () => {
 
   const [qrDataList, setQRDataList] = useState<any[]>([]);
   const [showQRPopup, setShowQRPopup] = useState(false);
   const [selectedQRData, setSelectedQRData] = useState<any>(null);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5); // You can adjust the number of items per page as needed
@@ -24,7 +24,7 @@ const ViewQRTickets: React.FC = () => {
           email: sessionUserData?.email
         };
 
-        const response = await fetchDataByParam(ApiMethod.GETTICKETS, {
+        const response = await fetchDataByParam(ApiMethod.REFUNDTICKETS, {
           params
         });
 
@@ -38,23 +38,29 @@ const ViewQRTickets: React.FC = () => {
     fetchData();
   }, []);
 
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = qrDataList.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleCloseQRPopup = () => {
     setShowQRPopup(false);
+    setShowSuccessPopup(true); // Set showSuccessPopup to true
+  };
+
+  const handleCloseSuccessPopup = () => {
+    window.location.reload(); // Force reload the page
+    setShowSuccessPopup(false)
   };
 
   const handleViewTicket = (qrData: any) => {
     setSelectedQRData(qrData);
     setShowQRPopup(true);
   };
-
   return (
     <Layout>
       <div>
-        <h3 className="text-center mb-3">View Ticket</h3>
+        <h3 className="text-center mb-3">Refund Tickets</h3>
         <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '30vh' }}>
           <Table striped bordered hover>
             <thead>
@@ -89,7 +95,7 @@ const ViewQRTickets: React.FC = () => {
                         className="w-100"
                         onClick={() => handleViewTicket(qrData)}
                       >
-                        View Ticket
+                        Refund
                       </Button>
                     }
                   </td>
@@ -118,15 +124,33 @@ const ViewQRTickets: React.FC = () => {
 
           <Modal show={showQRPopup} onHide={handleCloseQRPopup}>
             <Modal.Header closeButton>
-              <Modal.Title>QR Code</Modal.Title>
+              <Modal.Title>Refund Confirmation</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {selectedQRData && <QRCodeGenerator qrData={selectedQRData} />} {/* Pass qrData as prop if available */}
+              {selectedQRData && <RefundConfirmation
+                qrData={selectedQRData}
+                handleCloseQRPopup={handleCloseQRPopup} // Pass the function as prop
+              />} {/* Pass qrData as prop if available */}
             </Modal.Body>
           </Modal>
+
+          <Modal show={showSuccessPopup} onHide={handleCloseSuccessPopup}>
+            <Modal.Header className="alert alert-success" closeButton>
+              <Modal.Title>Success</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Your refund has been processed successfully.
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseSuccessPopup}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
         </Container>
       </div>
     </Layout>
   );
 }
-export default ViewQRTickets;
+export default ViewRefundQRTickets;

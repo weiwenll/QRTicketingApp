@@ -38,6 +38,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
                 <NavDropdown title="QR Management" id="basic-nav-dropdown">
                   <NavDropdown.Item href="/purchaseTicket">Purchase Tickets</NavDropdown.Item>
                   <NavDropdown.Item href="/viewQRTickets">View Tickets</NavDropdown.Item>
+                  <NavDropdown.Item href="/refundTickets">Refund Tickets</NavDropdown.Item>
                 </NavDropdown>
                 {sessionUserData.role === Utils.Role.ROLE_ADMIN &&
                   (

@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
-import LoginPage from '../components/Auth/LoginForm';
-import RegisterPage from '../components/Auth/RegisterForm';
 import Completion from '../components/QR/Payment/Completion';
 import Payment from '../components/QR/Payment/Payment';
 import ViewQRTickets from '../components/QR/Ticket/ViewQRTickets';
 import PurchaseTicket from '../components/QR/Ticket/PurchaseTicket';
-import Layout  from '../components/Layout';
 import ViewTrainFare from '../components/QR/Fare/ViewTrainFare';
 import LandingPage from '../pages/LandingPage';
 import ViewUser from '../components/Auth/ViewUser';
+import ViewRefundQRTickets from '../components/QR/Ticket/ViewRefundQRTickets';
 // import NotFoundPage from './pages/NotFoundPage';
 
 const AppRoutes: React.FC = () => {
@@ -38,6 +36,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/completion" element={<Completion />} />
       <Route path="/viewQRTickets" element={<ViewQRTickets />} />
       <Route path="/purchaseTicket" element={<PurchaseTicket />} />
+      <Route path="/refundTickets" element={<ViewRefundQRTickets />} />
       <Route path="/payment" element={<Payment />} />
       <Route path="/viewTrainFare" element={<ViewTrainFare />} />
       <Route path="/viewUser" element={<ViewUser />} />

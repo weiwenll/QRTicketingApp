@@ -33,6 +33,8 @@ export interface CheckoutProps {
     endDatetime: number,
     departurePoint: number,
     arrivalPoint: number,
+    departurePointDes: string,
+    arrivalPointDes: string,
     paymentRefNo: string,
     amount: number,
     currency: string,
@@ -50,5 +52,20 @@ export interface QRDataProps {
     status: number;
     effectiveDatetime: number;
     journeyType: number;
+  };
+}
+
+export interface QRRefundDataProps {
+  qrData: {    
+    serialNumber: string;
+    departurePoint: number;
+    arrivalPoint: number;
+    departurePointDes: string;
+    arrivalPointDes: string;
+    paymentRefNo: string;
+    status: number;
+    effectiveDatetime: number;
+    journeyType: number;
+    amount: number;
   };
 }
