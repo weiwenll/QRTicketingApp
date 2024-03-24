@@ -14,6 +14,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   const navigate = useNavigate();
   //Get session user data
   const sessionUserData = getSessionUserData();
+  const isGuestToken = localStorage.getItem('isGuest') || 'false';
 
   const handleLogoutClick = () => {
     localStorage.removeItem('sessionUserData');
@@ -32,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           /></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          {sessionUserData?.isAuthenticated === true &&
+          {(sessionUserData?.isAuthenticated === true || JSON.parse(isGuestToken) === true) &&
             (
               <Nav className="mr-auto">
                 <NavDropdown title="QR Management" id="basic-nav-dropdown">
@@ -40,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
                   <NavDropdown.Item href="/viewQRTickets">View Tickets</NavDropdown.Item>
                   <NavDropdown.Item href="/refundTickets">Refund Tickets</NavDropdown.Item>
                 </NavDropdown>
-                {sessionUserData.role === Utils.Role.ROLE_ADMIN &&
+                {sessionUserData?.role === Utils.Role.ROLE_ADMIN &&
                   (
                     <NavDropdown title="User Management" id="basic-nav-dropdown">
                     <NavDropdown.Item href="/viewUser">User</NavDropdown.Item>
@@ -58,7 +59,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             {sessionUserData?.isAuthenticated === true &&(
               <NavDropdown title={
               <>
-               <span style={{ marginRight: '0.5rem' }}>{sessionUserData.userName}</span>
+              <span style={{ marginRight: '0.5rem' }}>{sessionUserData.userName}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                 <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
