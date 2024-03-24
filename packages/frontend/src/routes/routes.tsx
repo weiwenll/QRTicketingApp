@@ -17,13 +17,9 @@ const AppRoutes: React.FC = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    // const isGuest = localStorage.getItem('isGuest');
     const isAuthenticated = !!token;
     setIsAuthenticated(isAuthenticated);
 
-    // if (!token && !isGuest) {
-    //   navigate('/register');
-    // }
   }, [navigate]);
 
   return (

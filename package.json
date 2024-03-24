@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:frontend": "cd packages/frontend && npm start",
-    "start:backend": "cd packages/backend && npm start",
-    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
+    "start": "cd packages/frontend && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": [
