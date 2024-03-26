@@ -41,6 +41,7 @@ const Completion: React.FC = () => {
         }
       );
       const data = response.data;
+      navigate('/qr', { state: { qrResponse: data } });
       setLoading(false);
       setSuccess(true);
       // Navigate to Payment component with state
