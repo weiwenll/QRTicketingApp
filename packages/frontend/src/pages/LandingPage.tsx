@@ -1,12 +1,13 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import backgroundImage from '../assets/background.webp';
-import { Container, Row, Col, Tab, Nav } from 'react-bootstrap';
+import { Container, Row, Col, Tab, Nav, Button, Card } from 'react-bootstrap';
 import LoginForm from '../components/Auth/LoginForm';
 import RegisterForm from '../components/Auth/RegisterForm';
 import animatedImage from '../assets/home.png';
 
 const LandingPage: React.FC = () => {
+  
   return (
     <Layout>
       <main
@@ -53,35 +54,66 @@ const LandingPage: React.FC = () => {
         
         <Container style={{ position: 'relative', zIndex: 1}}>
           <Tab.Container id="login-register-tabs" defaultActiveKey="login">
-            <Row>
-              <Col sm={8}>
-                {/* Content on the left side */}
-                <div>
-                  <div className="text-animation">
-                    <h2 style={{ fontSize: '5em',color:'#00285a',marginTop:'60px'}}>SQRT </h2> 
-                    <h2 style={{ fontSize: 'em', color: '#b65515' }}>for Seamless QR Ticketing System</h2>
-                  </div>
-                </div>
-              </Col>
+          <Row>
+          <Col sm={8}>
+  {/* Content on the left side */}
+  <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <div className="text-animation">
+      <h2 style={{ fontSize: '5em',color:'#00285a',marginTop:'40px',marginLeft: '10px'}}>SQRT </h2> 
+      <h2 style={{ fontSize: 'em', color: '#b65515',marginLeft: '10px' }}>for Seamless QR Ticketing System</h2>
+    </div>
+    {/* Three column boxes with divs */}
+   
+      <Col sm={12} className="mb-4">
+        <div className="p-3 text-black" style={{ height: '100%' }}>
+          <h5 className="mb-3">Purchase Tickets</h5>
+          <p style={{  fontWeight: '700'  }}>
+          Our website offers a user-friendly platform where you can easily purchase tickets for your journey. With a simple interface, simply log in to your account, secure payment options, navigate to your purchase history, and instantly retrieve your tickets!"
+         
+          </p>
+         {/*   <h5 className="mb-3">View Tickets</h5>
+            Purchasing tickets involves obtaining passes for transportation through platforms. Customers select ticket type, date, and payment method, receiving confirmation for entry upon purchase.
+          <p style={{  fontWeight: '700'  }}>
+            Viewing purchased tickets is a seamless process where customers access their digital passes via our platform. Simply log in to your account, navigate to your purchase history, and instantly retrieve your tickets.
+          </p>
+          <h5 className="mb-3">Train Fare</h5>
+          <p style={{  fontWeight: '700'  }}>
+          Viewing train fares is quick and easy on our platform.  With transparent pricing and real-time updates, you can plan your journey efficiently and make informed decisions about your train travel.
+          </p>*/}
+           <a href="/purchaseTicket">
+          <Button variant="primary">Buy Tickets</Button>
+          </a>
+        </div>
+      </Col>
+    
+  </div>
+</Col>
+
               <Col sm={4}>
-                <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '5px',}}>
-                  <Nav variant="tabs">
-                    <Nav.Item>
-                      <Nav.Link eventKey="login">Sign In</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="register">Sign Up</Nav.Link>
-                    </Nav.Item>
-                  </Nav>
-                  <Tab.Content>
-                    <Tab.Pane eventKey="login">
-                      <LoginForm />
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="register">
-                      <RegisterForm />
-                    </Tab.Pane>
-                  </Tab.Content>
-                </div>
+              <div style={{ backgroundColor: '#ffffff', padding: '20px', borderRadius: '5px' }}>
+                
+      <Row>
+        <Col>
+        <h5 className='text-center mb-3'>Login/Signup</h5>
+          <Nav variant="pills" className="flex-column flex-sm-row">
+            <Nav.Item className="flex-grow-1">
+              <Nav.Link eventKey="login" className="btn btn-primary w-100">Login</Nav.Link>
+            </Nav.Item>
+            <Nav.Item className="flex-grow-1">
+              <Nav.Link eventKey="register" className="btn btn-primary w-100">Signup</Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Col>
+      </Row>
+      <Tab.Content>
+        <Tab.Pane eventKey="login">
+          <LoginForm />
+        </Tab.Pane>
+        <Tab.Pane eventKey="register">
+          <RegisterForm />
+        </Tab.Pane>
+      </Tab.Content>
+    </div>
               </Col>
             </Row>
           </Tab.Container>
