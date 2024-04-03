@@ -9,6 +9,8 @@ import ViewTrainFare from '../components/QR/Fare/ViewTrainFare';
 import LandingPage from '../pages/LandingPage';
 import ViewUser from '../components/Auth/ViewUser';
 import ViewRefundQRTickets from '../components/QR/Ticket/ViewRefundQRTickets';
+import UserProfile from '../components/Auth/UserProfile';
+import ChangePassword from '../components/Auth/ChangePassword';
 // import NotFoundPage from './pages/NotFoundPage';
 
 const AppRoutes: React.FC = () => {
@@ -40,6 +42,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/payment" element={<Payment />} />
       <Route path="/viewTrainFare" element={<ViewTrainFare />} />
       <Route path="/viewUser" element={<ViewUser />} />
+      <Route path="/profile" element={<UserProfile />} />
+      <Route path="/changePassword" element={<ChangePassword />} />
       
     </Routes>
   );

@@ -81,6 +81,8 @@ const RegisterForm: React.FC = () => {
       email: email,
       userName: '',
       role: 'ROLE_USER',
+      phoneNumber: '',
+      userId: '',
       accessToken: '',
       refreshToken: '',
       isAuthenticated: true

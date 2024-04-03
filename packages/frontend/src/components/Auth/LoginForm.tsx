@@ -54,6 +54,8 @@ const LoginForm: React.FC = () => {
       email: email,
       role: '',
       userName: '',
+      phoneNumber: '',
+      userId: '',
       accessToken: '',
       refreshToken: '',
       isAuthenticated: true

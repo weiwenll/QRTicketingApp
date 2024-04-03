@@ -66,6 +66,8 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
               </>
               } id="basic-nav-dropdown">
                 <NavDropdown.Item onClick={handleLogoutClick}>Logout</NavDropdown.Item>
+                <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/changePassword">Change Password</NavDropdown.Item>
               </NavDropdown>
             ) }
           </Nav>

@@ -18,6 +18,8 @@ export enum ApiMethod {
   GETUSERS = 'users/GetUsers',
   REFUNDTICKETS = 'tickets/RefundTickets',
   REFUND = 'payments/Refund',
+  CHANGEPASSWORD = 'users/ChangePassword',
+  
   // Add more endpoints as needed
 }
 
