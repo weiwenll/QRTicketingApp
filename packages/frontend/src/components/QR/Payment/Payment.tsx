@@ -28,8 +28,8 @@ const Payment: React.FC = () => {
   const fetchFare = async () => {
     try {
       const params = {
-        srcStnId: 1,
-        destStnId: 2,
+        srcStnId: purchaseTicketRequest.departurePoint,
+        destStnId: purchaseTicketRequest.arrivalPoint,
         ticketType: purchaseTicketRequest.journeyType,
         journeyType: purchaseTicketRequest.journeyType,
         groupSize: purchaseTicketRequest.groupSize
@@ -55,7 +55,7 @@ const Payment: React.FC = () => {
     try {
       const response = await postDataByParams(ApiMethod.CREATEPAYMENTINTENT,
         {
-          email: sessionUserData?.email,
+          email: purchaseTicketRequest.email,
           currency: purchaseTicketRequest.currency,
           allowFutureUsage: true,
           amount: amount * 100

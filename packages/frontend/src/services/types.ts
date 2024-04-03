@@ -15,8 +15,10 @@ export interface SessionUserData {
   email: string;
   userName: string;
   role: string;
+  phoneNumber: string;
+  userId: string;
   accessToken: string;
-  refreshToken: string;
+  refreshToken: string;  
   isAuthenticated: boolean;
 }
 

@@ -6,6 +6,7 @@ import axios from 'axios';
 import Layout from '../../Layout';
 import { getSessionUserData } from '../../Utils';
 import { ApiMethod, fetchDataWithoutParam } from '../../../services/ApiUtils';
+import mrtMap from '../../../assets/mrtMap.png';
 
 const PurchaseTicket: React.FC = () => {
 
@@ -107,7 +108,16 @@ const PurchaseTicket: React.FC = () => {
     return (
         <Layout>
             <div>
-                <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '30vh', marginTop: '100px' }}>
+                <Container className="d-flex align-items-center justify-content-center mb-3" style={{ minHeight: '30vh', marginTop: '100px' }}>
+                   <Row>    
+                    <Col>
+                    <img
+                        src={mrtMap} 
+                        className="img-thumbnail"
+                        alt="MRTMAP"
+                        />
+                    </Col>
+                    <Col>
                     <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '500px' }}>
                         <h3 className="text-center mb-3">Purchase Ticket</h3>
                         <Row className="mb-3">
@@ -210,6 +220,21 @@ const PurchaseTicket: React.FC = () => {
                                 </Form.Group>
                             </Col>
                         </Row>
+                    
+                         {!sessionUserData?.isAuthenticated === true &&
+                        (
+                           <Form.Group controlId="formGroupSize" className="mb-3">
+                                    <Form.Label>Email *</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        placeholder="Enter Email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                            </Form.Group>
+                         )
+                    } 
 
                         <Button variant="primary" type="submit" className="w-100 mb-3">
                             Search
@@ -217,6 +242,11 @@ const PurchaseTicket: React.FC = () => {
                         {error && <div className="alert alert-danger" role="alert">{error}</div>}
                         {success && <div className="alert alert-success" role="alert">Purchase successful!</div>}
                     </Form>
+                   
+                    </Col>
+                   </Row>
+                   
+                   
                 </Container>
             </div>
         </Layout>
