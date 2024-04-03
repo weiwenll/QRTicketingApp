@@ -115,9 +115,9 @@ const RegisterForm: React.FC = () => {
   };
 
   return (    
-    <Container className="d-flex align-items-center justify-content-center">
+    <Container className="d-flex align-items-center justify-content-center mt-3">
       <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '330px' }}>
-        <h3 className="text-center mb-3">Create an account</h3>
+       
         <Form.Group controlId="formUsername" className="mb-3">
           <Form.Label>Name *</Form.Label>
           <Form.Control

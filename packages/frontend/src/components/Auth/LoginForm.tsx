@@ -89,9 +89,9 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center">
+    <Container className="d-flex align-items-center justify-content-center mt-3">
       <Form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '330px' }}>        
-        <h4 className="text-center mb-3">Sign in</h4>
+      
         <Form.Group controlId="formEmail" className="mb-3">
           <Form.Label>Email *</Form.Label>
           <Form.Control
