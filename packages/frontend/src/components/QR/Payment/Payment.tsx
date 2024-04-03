@@ -55,7 +55,7 @@ const Payment: React.FC = () => {
     try {
       const response = await postDataByParams(ApiMethod.CREATEPAYMENTINTENT,
         {
-          email: purchaseTicketRequest.email,
+          email: sessionUserData?.isAuthenticated ? sessionUserData.email : purchaseTicketRequest.email,
           currency: purchaseTicketRequest.currency,
           allowFutureUsage: true,
           amount: amount * 100
