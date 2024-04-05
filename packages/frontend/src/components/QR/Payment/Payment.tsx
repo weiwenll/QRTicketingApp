@@ -87,16 +87,14 @@ const Payment: React.FC = () => {
   }, []);  
 
   return (
-    <Layout>
-      <div>
-        <center><h3>Payment Confirmation</h3></center>
-        {clientSecret && stripePromise && (
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <CheckoutForm purchaseTicketRequest={purchaseTicketRequest} />
-          </Elements>
-        )}
-      </div>
-    </Layout>
+    <div>
+      <center><h3>Payment Confirmation</h3></center>
+      {clientSecret && stripePromise && (
+        <Elements stripe={stripePromise} options={{ clientSecret }}>
+          <CheckoutForm purchaseTicketRequest={purchaseTicketRequest} />
+        </Elements>
+      )}
+    </div>
   );
 }
 

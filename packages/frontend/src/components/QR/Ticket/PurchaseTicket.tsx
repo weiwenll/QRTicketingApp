@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button, Col, Row } from 'react-bootstrap';
 import CustomNavbar from '../../CustomNavbar';
@@ -8,8 +8,7 @@ import { getSessionUserData } from '../../Utils';
 import { ApiMethod, fetchDataWithoutParam ,postDataByParams} from '../../../services/ApiUtils';
 import mrtMap from '../../../assets/mrtMap.png';
 
-const PurchaseTicket: React.FC = () => {
-
+const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, changeStep:Dispatch<SetStateAction<boolean>>) => {
 
     //Get session user data
     const sessionUserData = getSessionUserData();
@@ -137,9 +136,8 @@ const PurchaseTicket: React.FC = () => {
        
    
     return (
-        <Layout>
             <div>
-                <Container className="d-flex align-items-center justify-content-center mb-3" style={{ minHeight: '30vh', marginTop: '100px' }}>
+                <Container className="d-flex align-items-center justify-content-center mb-3" style={{ minHeight: '30vh', marginTop: '50px' }}>
                    <Row>    
                     <Col>
                     <img
@@ -300,7 +298,6 @@ const PurchaseTicket: React.FC = () => {
                    
                 </Container>
             </div>
-        </Layout>
     );
 };
 
