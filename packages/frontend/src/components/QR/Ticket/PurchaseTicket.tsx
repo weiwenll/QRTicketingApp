@@ -265,7 +265,7 @@ const PurchaseTicket: React.FC = () => {
                                 </Form.Group>
                             </Col>
                             <Col className="mt-3">
-                            <Button  onClick={fetchFare} variant="primary" type="submit" className="w-100 mt-3">
+                            <Button  onClick={fetchFare} variant="primary" className="w-100 mt-3">
                                 Calculate
                             </Button>
                            
