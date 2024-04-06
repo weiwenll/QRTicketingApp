@@ -176,7 +176,7 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
                                         type="number"
                                         placeholder="Enter Group Size"
                                         name='groupSize'
-                                        value={purchaseTicketRequest.groupSize}
+                                        value={purchaseTicketRequest.groupSize || ''}
                                         onChange={onChangeFormHandler}
                                         min={1} // Set the minimum value to 1
                                         required
@@ -189,9 +189,9 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
                                 <Form.Group controlId="formStartDatetime" className="mb-3">
                                     <Form.Label>Start Datetime *</Form.Label>
                                     <Form.Control
-                                        type="date"
+                                        type="datetime-local"
                                         name='startDatetime'
-                                        value={purchaseTicketRequest.startDatetime ? new Date(purchaseTicketRequest.startDatetime).toISOString().slice(0, -1) : ''}
+                                        value={purchaseTicketRequest.endDatetime ? new Date(purchaseTicketRequest.endDatetime).toISOString().slice(0, -1) : ''}
                                         onChange={setDateTime}
                                         required
                                     />
@@ -201,7 +201,7 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
                                 <Form.Group controlId="formEndDatetime" className="mb-3">
                                     <Form.Label>End Datetime *</Form.Label>
                                     <Form.Control
-                                        type="date"
+                                        type="datetime-local"
                                         name='endDatetime'
                                         value={purchaseTicketRequest.endDatetime ? new Date(purchaseTicketRequest.endDatetime).toISOString().slice(0, -1) : ''}
                                         onChange={setDateTime}
@@ -258,7 +258,7 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
                                     <Form.Control
                                         type="text"
                                         name= "amount"
-                                        value={purchaseTicketRequest.amount}
+                                        value={purchaseTicketRequest.amount || ''}
                                         disabled
                                     />
                                 </Form.Group>
