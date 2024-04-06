@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
+import React, { useEffect, useState, Dispatch, SetStateAction, useRef } from 'react';
 import { Container, Form, Button, Col, Row } from 'react-bootstrap';
 import { getSessionUserData } from '../../Utils';
 import { ApiMethod, fetchDataWithoutParam ,postDataByParams} from '../../../services/ApiUtils';
@@ -34,9 +34,10 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
     ];
 
     const onChangeFormHandler = (event: any) => {
+        event.preventDefault();
         setPurchaseTicketRequest((purchaseTicketRequest: PurchaseTicketRequest) => ({
             ...purchaseTicketRequest,
-            [event.target.name] : event.target.name === 'email' ? event.target.value : event.target.valueAsNumber
+            [event.target.name] : event.target.name === 'email' ? event.target.value : parseInt(event.target.value)
         })) 
         console.log(purchaseTicketRequest)
     }
@@ -63,7 +64,6 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
             ...purchaseTicketRequest,
             [event.target.name]: result
         })) 
-
         console.log(purchaseTicketRequest)
     }
 
@@ -191,7 +191,7 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
                                     <Form.Control
                                         type="datetime-local"
                                         name='startDatetime'
-                                        value={purchaseTicketRequest.endDatetime ? new Date(purchaseTicketRequest.endDatetime).toISOString().slice(0, -1) : ''}
+                                        value={purchaseTicketRequest.startDatetime ? new Date(purchaseTicketRequest.startDatetime).toISOString().slice(0, -1) : ''}
                                         onChange={setDateTime}
                                         required
                                     />
@@ -218,7 +218,7 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
                                         onChangeFormHandler(e);
                                         const selectedDeparturePoint = departurePoints.find(point => point.stnId === parseInt(e.target.value));
                                         if (selectedDeparturePoint) {
-                                            setPointDesc(selectedDeparturePoint.stnName,e.target.name);
+                                            setPointDesc(selectedDeparturePoint.stnName,'departurePointDesc');
                                         }
                                     }} required>
                                         <option value="">Select Departure</option>
@@ -237,7 +237,7 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
                                         onChangeFormHandler(e);
                                         const selectedArrivalPoint = arrivalPoints.find(point => point.stnId === parseInt(e.target.value));
                                         if (selectedArrivalPoint) {
-                                            setPointDesc(selectedArrivalPoint.stnName,e.target.name);
+                                            setPointDesc(selectedArrivalPoint.stnName,'arrivalPointDes');
                                         }
                                     }} required>
                                         <option value="">Select Arrival</option>
@@ -264,7 +264,7 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
                                 </Form.Group>
                             </Col>
                             <Col className="mt-3">
-                            <Button  onClick={fetchFare} variant="primary" type="submit" className="w-100 mt-3">
+                            <Button  onClick={fetchFare} variant="primary" className="w-100 mt-3">
                                 Calculate
                             </Button>
                            
