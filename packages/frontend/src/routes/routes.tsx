@@ -40,9 +40,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/completion" element={<Completion />} />
       <Route path="/completion" element={<QrTicket />} />
       <Route path="/viewQRTickets" element={<ViewQRTickets />} />
-      <Route path="/purchaseTicket" element={<PurchaseTicket />} />
       <Route path="/refundTickets" element={<ViewRefundQRTickets />} />
-      <Route path="/payment" element={<Payment />} />
+      {/* <Route path="/payment" element={<Payment />} /> */}
       <Route path="/viewTrainFare" element={<ViewTrainFare />} />
       <Route path="/viewUser" element={<ViewUser />} />
       <Route path="/profile" element={<UserProfile />} />

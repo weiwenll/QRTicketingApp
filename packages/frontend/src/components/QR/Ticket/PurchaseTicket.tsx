@@ -1,42 +1,30 @@
 import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button, Col, Row } from 'react-bootstrap';
-import CustomNavbar from '../../CustomNavbar';
-import axios from 'axios';
-import Layout from '../../Layout';
 import { getSessionUserData } from '../../Utils';
 import { ApiMethod, fetchDataWithoutParam ,postDataByParams} from '../../../services/ApiUtils';
 import mrtMap from '../../../assets/mrtMap.png';
+import { PurchaseTicketRequest } from '../Payment/CheckOut';
 
-const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, changeStep:Dispatch<SetStateAction<boolean>>) => {
+interface Props {
+    purchaseTicketRequest: PurchaseTicketRequest,
+    setPurchaseTicketRequest: Dispatch<SetStateAction<PurchaseTicketRequest>>,
+    changeStep:Dispatch<SetStateAction<number>>,
+    changeStatus:Dispatch<SetStateAction<{
+        [k: number]: boolean;
+    }>>
+}
+const PurchaseTicket: React.FC<Props> = (props: Props) => {
+
+    const {purchaseTicketRequest,setPurchaseTicketRequest,changeStatus,changeStep} = props;
 
     //Get session user data
     const sessionUserData = getSessionUserData();
 
-    const [journeyType, setJourneyType] = useState<number>(0);
-    const [groupSize, setGroupSize] = useState<number>(1);
-    const [operatorId, setOperatorId] = useState<number>(0);
-    const [startDatetime, setStartDatetime] = useState<number>(0);
-    const [endDatetime, setEndDatetime] = useState<number>(0);
-    const [paymentRefNo, setPaymentRefNo] = useState<string>('');
-    const [amount, setAmount] = useState<number>(0);
-    const [currency, setCurrency] = useState<string>('');
-    const [phoneNo, setPhoneNo] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [success, setSuccess] = useState<boolean>(false);
-
-    const [departurePoint, setDeparturePoint] = useState<number>(0);
-    const [arrivalPoint, setArrivalPoint] = useState<number>(0);
-
     const [departurePoints, setDeparturePoints] = useState<any[]>([]);
     const [arrivalPoints, setArrivalPoints] = useState<any[]>([]);
     const [journeyTypes, setJourneyTypes] = useState<any[]>([]);
-
-    const [departurePointDes, setDeparturePointDes] = useState<string>('');
-    const [arrivalPointDes, setArrivalPointDes] = useState<string>('');
-
-    const navigate = useNavigate();
 
     const journeyTypeList = [
         { id: 1, name: 'Single Journey' },
@@ -44,6 +32,41 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
         { id: 3, name: 'Group Ticket' }
         // Add more items as needed
     ];
+
+    const onChangeFormHandler = (event: any) => {
+        setPurchaseTicketRequest((purchaseTicketRequest: PurchaseTicketRequest) => ({
+            ...purchaseTicketRequest,
+            [event.target.name] : event.target.name === 'email' ? event.target.value : event.target.valueAsNumber
+        })) 
+        console.log(purchaseTicketRequest)
+    }
+
+    const setAmount = (value: string) => {
+        setPurchaseTicketRequest((purchaseTicketRequest: PurchaseTicketRequest) => ({
+            ...purchaseTicketRequest,
+            amount: parseInt(value)
+        })) 
+    }
+
+    const setPointDesc = (value: string, point: string) => {
+        setPurchaseTicketRequest((purchaseTicketRequest: PurchaseTicketRequest) => ({
+            ...purchaseTicketRequest,
+            [point]: value
+        })) 
+    }
+
+    const setDateTime = (event: any) => {
+        const localTime = new Date(event.target.value);
+        const offset = localTime.getTimezoneOffset() * 60000; // Convert minutes to milliseconds
+        const result = localTime.getTime() - offset;
+        setPurchaseTicketRequest((purchaseTicketRequest: PurchaseTicketRequest) => ({
+            ...purchaseTicketRequest,
+            [event.target.name]: result
+        })) 
+
+        console.log(purchaseTicketRequest)
+    }
+
 
     const fetchPoints = async () => {
         try {
@@ -68,11 +91,11 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
             try {
 
             const params = {
-                srcStnId:departurePoint,
-                destStnId: arrivalPoint,
-                ticketType: journeyType,
-                journeyType: journeyType,
-                groupSize: groupSize
+                srcStnId:purchaseTicketRequest.departurePoint,
+                destStnId: purchaseTicketRequest.arrivalPoint,
+                ticketType: purchaseTicketRequest.journeyType,
+                journeyType: purchaseTicketRequest.journeyType,
+                groupSize: purchaseTicketRequest.groupSize
             };
 
             const response = await postDataByParams(ApiMethod.GETTRAINFARE,
@@ -107,30 +130,13 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
                     setError('Failed to fetch fare amount.');
                     return;
                 }
-        
-                // Construct purchase ticket request
-                const purchaseTicketRequest = {
-                    journeyType,
-                    groupSize,
-                    operatorId,
-                    startDatetime,
-                    endDatetime,
-                    departurePoint,
-                    arrivalPoint,
-                    departurePointDes,
-                    arrivalPointDes,
-                    paymentRefNo,
-                    amount,
-                    currency: "SGD", // Overriding currency with a default value
-                    phoneNo: "1122334455", // Overriding phone number with a default value
-                    email,
-                };
-        
-                // Navigate to Payment component with state
-                navigate('/payment', { state: { purchaseTicketRequest } });
+    
             } catch (error) {
                 console.error('Error handling submit:', error);
                 setError('Failed to handle submit.');
+            } finally {
+                changeStatus({[0] : true})
+                changeStep(1)
             }
         };
        
@@ -153,7 +159,7 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
                             <Col>
                                 <Form.Group controlId="formJourneyType" className="mb-3">
                                     <Form.Label>Journey Type  *</Form.Label>
-                                    <Form.Select value={journeyType} onChange={(e) => setJourneyType(parseInt(e.target.value))} required>
+                                    <Form.Select name='journeyType' value={purchaseTicketRequest.journeyType} onChange={onChangeFormHandler} required>
                                         <option value="">Select Journey Type</option>
                                         {journeyTypes.map((point) => (
                                             <option key={point.id} value={point.id}>
@@ -169,8 +175,9 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
                                     <Form.Control
                                         type="number"
                                         placeholder="Enter Group Size"
-                                        value={groupSize}
-                                        onChange={(e) => setGroupSize(parseInt(e.target.value))}
+                                        name='groupSize'
+                                        value={purchaseTicketRequest.groupSize}
+                                        onChange={onChangeFormHandler}
                                         min={1} // Set the minimum value to 1
                                         required
                                     />
@@ -182,13 +189,10 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
                                 <Form.Group controlId="formStartDatetime" className="mb-3">
                                     <Form.Label>Start Datetime *</Form.Label>
                                     <Form.Control
-                                        type="datetime-local"
-                                        value={startDatetime ? new Date(startDatetime).toISOString().slice(0, -1) : ''}
-                                        onChange={(e) => {
-                                            const localTime = new Date(e.target.value);
-                                            const offset = localTime.getTimezoneOffset() * 60000; // Convert minutes to milliseconds
-                                            setStartDatetime(localTime.getTime() - offset);
-                                        }}
+                                        type="date"
+                                        name='startDatetime'
+                                        value={purchaseTicketRequest.startDatetime ? new Date(purchaseTicketRequest.startDatetime).toISOString().slice(0, -1) : ''}
+                                        onChange={setDateTime}
                                         required
                                     />
                                 </Form.Group>
@@ -197,13 +201,10 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
                                 <Form.Group controlId="formEndDatetime" className="mb-3">
                                     <Form.Label>End Datetime *</Form.Label>
                                     <Form.Control
-                                        type="datetime-local"
-                                        value={endDatetime ? new Date(endDatetime).toISOString().slice(0, -1) : ''}
-                                        onChange={(e) => {
-                                            const localTime = new Date(e.target.value);
-                                            const offset = localTime.getTimezoneOffset() * 60000; // Convert minutes to milliseconds
-                                            setEndDatetime(localTime.getTime() - offset);
-                                        }}
+                                        type="date"
+                                        name='endDatetime'
+                                        value={purchaseTicketRequest.endDatetime ? new Date(purchaseTicketRequest.endDatetime).toISOString().slice(0, -1) : ''}
+                                        onChange={setDateTime}
                                         required
                                     />
                                 </Form.Group>
@@ -213,11 +214,11 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
                             <Col>
                                 <Form.Group controlId="formDeparturePoint" className="mb-3">
                                     <Form.Label>Departure Point *</Form.Label>
-                                    <Form.Select value={departurePoint} onChange={(e) => {
-                                        setDeparturePoint(parseInt(e.target.value));
+                                    <Form.Select name='departurePoint' value={purchaseTicketRequest.departurePoint} onChange={(e) => {
+                                        onChangeFormHandler(e);
                                         const selectedDeparturePoint = departurePoints.find(point => point.stnId === parseInt(e.target.value));
                                         if (selectedDeparturePoint) {
-                                            setDeparturePointDes(selectedDeparturePoint.stnName);
+                                            setPointDesc(selectedDeparturePoint.stnName,e.target.name);
                                         }
                                     }} required>
                                         <option value="">Select Departure</option>
@@ -232,11 +233,11 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
                             <Col>
                                 <Form.Group controlId="formArrivalPoint" className="mb-3">
                                     <Form.Label>Arrival Point *</Form.Label>
-                                    <Form.Select value={arrivalPoint} onChange={(e) =>{
-                                        setArrivalPoint(parseInt(e.target.value))
+                                    <Form.Select name='arrivalPoint' value={purchaseTicketRequest.arrivalPoint} onChange={(e) =>{
+                                        onChangeFormHandler(e);
                                         const selectedArrivalPoint = arrivalPoints.find(point => point.stnId === parseInt(e.target.value));
                                         if (selectedArrivalPoint) {
-                                            setArrivalPointDes(selectedArrivalPoint.stnName);
+                                            setPointDesc(selectedArrivalPoint.stnName,e.target.name);
                                         }
                                     }} required>
                                         <option value="">Select Arrival</option>
@@ -256,8 +257,8 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
                                     <Form.Label>Ticket Price *</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        name= "fare"
-                                        value={amount}
+                                        name= "amount"
+                                        value={purchaseTicketRequest.amount}
                                         disabled
                                     />
                                 </Form.Group>
@@ -276,9 +277,10 @@ const PurchaseTicket: any = (changeStatus:Dispatch<SetStateAction<number>>, chan
                                     <Form.Label>Email *</Form.Label>
                                     <Form.Control
                                         type="email"
+                                        name='email'
                                         placeholder="Enter Email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={purchaseTicketRequest.email}
+                                        onChange={onChangeFormHandler}
                                         required
                                     />
                             </Form.Group>

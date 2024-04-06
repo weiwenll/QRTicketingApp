@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import { loadStripe } from "@stripe/stripe-js";
@@ -8,11 +8,20 @@ import CustomNavbar from "../../CustomNavbar";
 import { getSessionUserData } from "../../Utils";
 import Layout from "../../Layout";
 import { ApiMethod, postDataByParams } from "../../../services/ApiUtils";
+import { PurchaseTicketRequest } from '../Payment/CheckOut';
 
-const Payment: React.FC = () => {
+interface Props {
+  purchaseTicketRequest: PurchaseTicketRequest,
+  setPurchaseTicketRequest: Dispatch<SetStateAction<PurchaseTicketRequest>>,
+  changeStep:Dispatch<SetStateAction<number>>,
+  changeStatus:Dispatch<SetStateAction<{
+      [k: number]: boolean;
+  }>>
+}
 
-  const location = useLocation();
-  const purchaseTicketRequest = location.state?.purchaseTicketRequest;
+const Payment: React.FC<Props> = (props:Props) => {
+
+  const {purchaseTicketRequest,setPurchaseTicketRequest,changeStatus,changeStep} = props;
   console.info(purchaseTicketRequest);
 
   const [clientSecret, setClientSecret] = useState("");
@@ -23,7 +32,7 @@ const Payment: React.FC = () => {
 
   //Get session user data
   const sessionUserData = getSessionUserData();
-  const [amount, setAmount] = useState<number>(0);
+  const [newAmount, setNewAmount] = useState<number>(0);
 
   const fetchFare = async () => {
     try {
@@ -43,7 +52,7 @@ const Payment: React.FC = () => {
       );
 
       const data = response.data;
-      setAmount(data.ResponseData.fare);
+      setNewAmount(data.ResponseData.fare);
       return data.ResponseData.fare; // Return the fare amount for use in fetchPaymentIntent()
     } catch (error) {
       console.error('Error fetching points:', error);
@@ -67,12 +76,18 @@ const Payment: React.FC = () => {
 
       setClientSecret(response.data.ResponseData.clientSecret);
       setPaymentIntentId(response.data.ResponseData.paymentIntentId);
-      purchaseTicketRequest.paymentRefNo = response.data.ResponseData.paymentIntentId;
-      purchaseTicketRequest.amount = amount;
+
+      setPurchaseTicketRequest((purchaseTicketRequest: PurchaseTicketRequest) => ({
+        ...purchaseTicketRequest,
+        paymentRefNo: response.data.ResponseData.paymentIntentId,
+        amount: newAmount
+      })) 
 
     } catch (error) {
       console.error("Error fetching payment intent:", error);
       // Handle error gracefully, e.g., display an error message to the user
+    } finally {
+      changeStatus({[1] : true})
     }
   };
 
