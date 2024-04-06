@@ -5,7 +5,7 @@ import CustomNavbar from '../../CustomNavbar';
 import axios from 'axios';
 import Layout from '../../Layout';
 import { getSessionUserData } from '../../Utils';
-import { ApiMethod, fetchDataWithoutParam } from '../../../services/ApiUtils';
+import { ApiMethod, fetchDataWithoutParam ,postDataByParams} from '../../../services/ApiUtils';
 import mrtMap from '../../../assets/mrtMap.png';
 
 const PurchaseTicket: React.FC = () => {
@@ -59,52 +59,83 @@ const PurchaseTicket: React.FC = () => {
             // Handle the error appropriately, e.g., display an error message to the user
         }
     };
-
+  
     useEffect(() => {
-        setEmail(sessionUserData?.email || 'insaneappcreator@gmail.com');
+        // setEmail(sessionUserData?.email || 'insaneappcreator@gmail.com');
         fetchPoints();
     }, []);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+   const fetchFare = async () => {
+            try {
 
-        setError('');
-        setSuccess(false);
+            const params = {
+                srcStnId:departurePoint,
+                destStnId: arrivalPoint,
+                ticketType: journeyType,
+                journeyType: journeyType,
+                groupSize: groupSize
+            };
 
-        // Basic validation checks
-        /*if (!paymentRefNo || !amount || !currency || !phoneNo || !email) {
-            setError('All fields are required.');
-            return;
-        }*/
-
-        // Your additional validation logic goes here
-
-        const purchaseTicketRequest = {
-            journeyType,
-            groupSize,
-            operatorId,
-            startDatetime,
-            endDatetime,
-            departurePoint,
-            arrivalPoint,
-            departurePointDes,
-            arrivalPointDes,
-            paymentRefNo,
-            amount,
-            currency,
-            phoneNo,
-            email,
+            const response = await postDataByParams(ApiMethod.GETTRAINFARE,
+                params,
+                {
+                headers: { "Content-Type": "application/json" }
+                }
+            );
+            const data = response.data;
+            setAmount(data.ResponseData.fare);
+            console.log(data.ResponseData.fare)
+            return data.ResponseData.fare; 
+            } catch (error) {
+            console.error('Error fetching points:', error);
+            // Handle the error appropriately, e.g., display an error message to the user
+            }
+        }; 
+    
+        const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault(); // Don't forget to prevent default form submission
+            
+            setError('');
+            setSuccess(false);
+        
+            try {
+                // Fetch fare amount
+                const fareAmount = await fetchFare();
+                console.log("Fare amount: " + fareAmount);
+        
+                // Proceed only if fareAmount is valid
+                if (!fareAmount || isNaN(fareAmount)) {
+                    setError('Failed to fetch fare amount.');
+                    return;
+                }
+        
+                // Construct purchase ticket request
+                const purchaseTicketRequest = {
+                    journeyType,
+                    groupSize,
+                    operatorId,
+                    startDatetime,
+                    endDatetime,
+                    departurePoint,
+                    arrivalPoint,
+                    departurePointDes,
+                    arrivalPointDes,
+                    paymentRefNo,
+                    amount,
+                    currency: "SGD", // Overriding currency with a default value
+                    phoneNo: "1122334455", // Overriding phone number with a default value
+                    email,
+                };
+        
+                // Navigate to Payment component with state
+                navigate('/payment', { state: { purchaseTicketRequest } });
+            } catch (error) {
+                console.error('Error handling submit:', error);
+                setError('Failed to handle submit.');
+            }
         };
-
-        purchaseTicketRequest.amount = 100;
-        purchaseTicketRequest.currency = "sgd";
-        purchaseTicketRequest.phoneNo = "1122334455";
-
-        // Navigate to Payment component with state
-        navigate('/payment', { state: { purchaseTicketRequest: purchaseTicketRequest } });
-
-    };
-
+       
+   
     return (
         <Layout>
             <div>
@@ -220,10 +251,30 @@ const PurchaseTicket: React.FC = () => {
                                 </Form.Group>
                             </Col>
                         </Row>
+
+                        <Row className="mb-3">
+                            <Col>
+                                <Form.Group controlId="formCalculateFare" className="mb-3">
+                                    <Form.Label>Ticket Price *</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name= "fare"
+                                        value={amount}
+                                        disabled
+                                    />
+                                </Form.Group>
+                            </Col>
+                            <Col className="mt-3">
+                            <Button  onClick={fetchFare} variant="primary" className="w-100 mt-3">
+                                Calculate
+                            </Button>
+                           
+                            </Col>
+                        </Row>
                     
                          {!sessionUserData?.isAuthenticated === true &&
                         (
-                           <Form.Group controlId="formGroupSize" className="mb-3">
+                           <Form.Group controlId="formGroupSize" className="mb-4">
                                     <Form.Label>Email *</Form.Label>
                                     <Form.Control
                                         type="email"
@@ -237,7 +288,7 @@ const PurchaseTicket: React.FC = () => {
                     } 
 
                         <Button variant="primary" type="submit" className="w-100 mb-3">
-                            Search
+                            Proceed Payment
                         </Button>
                         {error && <div className="alert alert-danger" role="alert">{error}</div>}
                         {success && <div className="alert alert-success" role="alert">Purchase successful!</div>}
