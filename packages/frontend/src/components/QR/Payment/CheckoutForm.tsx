@@ -1,14 +1,21 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import Utils from "../../Utils";
 import qs from "qs";
 import { CheckoutProps } from "../../../services/types";
 import { ApiMethod, postDataByParams } from "../../../services/ApiUtils";
+import { PurchaseTicketRequest } from "./CheckOut";
 
+interface Props {
+  purchaseTicketRequest: PurchaseTicketRequest,
+  changeStatus:Dispatch<SetStateAction<{
+      [k: number]: boolean;
+  }>>
+}
 
-const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
+const CheckoutForm: React.FC<Props> = ({ purchaseTicketRequest, changeStatus }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -72,6 +79,7 @@ const CheckoutForm: React.FC<CheckoutProps> = ({ purchaseTicketRequest }) => {
     }
 
     setIsProcessing(false);
+    changeStatus({[1] : true})
   };
 
   return (

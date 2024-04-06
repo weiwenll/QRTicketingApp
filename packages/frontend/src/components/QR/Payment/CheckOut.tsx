@@ -19,8 +19,8 @@ interface  PurchaseTicketRequest {
   arrivalPointDes: string,
   paymentRefNo: string,
   amount: number,
-  currency: "SGD", // Overriding currency with a default value
-  phoneNo: "1122334455", // Overriding phone number with a default value
+  currency: string, 
+  phoneNo: string, 
   email: string,
 };
 
@@ -50,6 +50,8 @@ const CheckOut = () => {
     [k: number]: boolean;
   }>({});
 
+  console.log(activeStep)
+  console.log(completed)
 
   const handleStep = (step: number) => () => {
     setActiveStep(step);
@@ -76,7 +78,6 @@ const CheckOut = () => {
         />  }
         { activeStep === 1 && <Payment 
           changeStatus= {setCompleted} 
-          changeStep= {setActiveStep} 
           purchaseTicketRequest= {purchaseTicketRequest}
           setPurchaseTicketRequest = {setPurchaseTicketRequest}
         />  }
