@@ -9,6 +9,7 @@ import { PurchaseTicketRequest } from '../Payment/CheckOut';
 interface Props {
   purchaseTicketRequest: PurchaseTicketRequest,
   setPurchaseTicketRequest: Dispatch<SetStateAction<PurchaseTicketRequest>>,
+  changeStep:Dispatch<SetStateAction<number>>,
   changeStatus:Dispatch<SetStateAction<{
       [k: number]: boolean;
   }>>
@@ -16,7 +17,7 @@ interface Props {
 
 const Payment: React.FC<Props> = (props:Props) => {
 
-  const {purchaseTicketRequest,setPurchaseTicketRequest,changeStatus} = props;
+  const {purchaseTicketRequest,setPurchaseTicketRequest,changeStatus,changeStep} = props;
   console.info(purchaseTicketRequest);
 
   const [clientSecret, setClientSecret] = useState("");
@@ -99,7 +100,7 @@ const Payment: React.FC<Props> = (props:Props) => {
       <center><h3>Payment Confirmation</h3></center>
       {clientSecret && stripePromise && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CheckoutForm purchaseTicketRequest={purchaseTicketRequest} changeStatus={changeStatus} />
+          <CheckoutForm purchaseTicketRequest={purchaseTicketRequest} changeStatus={changeStatus} changeStep={changeStep}/>
         </Elements>
       )}
     </div>

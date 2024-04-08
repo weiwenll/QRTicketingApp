@@ -6,6 +6,9 @@ import StepButton from '@mui/material/StepButton';
 import Layout from '../../Layout';
 import PurchaseTicket from '../Ticket/PurchaseTicket';
 import Payment from './Payment';
+import Invoice from './Invoice';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 interface  PurchaseTicketRequest {
   journeyType: number,
@@ -25,7 +28,7 @@ interface  PurchaseTicketRequest {
 };
 
 
-const steps = ['Purchase Ticket', 'Payment'];
+const steps = ['Purchase Ticket', 'Payment', 'Invoice'];
 
 const CheckOut = () => {
 
@@ -57,6 +60,15 @@ const CheckOut = () => {
     setActiveStep(step);
   };
 
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
   return (
   <Layout>
       <Box sx={{ width: '50%', mx: 'auto'}}>
@@ -69,7 +81,23 @@ const CheckOut = () => {
             </Step>
           ))}
         </Stepper>
-
+        <React.Fragment>
+        <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+          <Button
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            sx={{ mr: 1 }}
+          >
+            Back
+          </Button>
+          <Box sx={{ flex: '1 1 auto' }} />
+          <Button disabled={activeStep === 2} onClick={handleNext}>
+            Next
+          </Button>
+        </Box>
+      </React.Fragment>
         { activeStep === 0 && <PurchaseTicket 
               changeStatus= {setCompleted} 
               changeStep= {setActiveStep} 
@@ -78,8 +106,13 @@ const CheckOut = () => {
         />  }
         { activeStep === 1 && <Payment 
           changeStatus= {setCompleted} 
+          changeStep= {setActiveStep} 
           purchaseTicketRequest= {purchaseTicketRequest}
           setPurchaseTicketRequest = {setPurchaseTicketRequest}
+        />  }
+        { activeStep === 2 && <Invoice 
+          changeStatus= {setCompleted} 
+          purchaseTicketRequest= {purchaseTicketRequest}
         />  }
       </Box>
     </Layout>

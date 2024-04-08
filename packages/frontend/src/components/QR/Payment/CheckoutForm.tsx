@@ -10,12 +10,13 @@ import { PurchaseTicketRequest } from "./CheckOut";
 
 interface Props {
   purchaseTicketRequest: PurchaseTicketRequest,
+  changeStep:Dispatch<SetStateAction<number>>,
   changeStatus:Dispatch<SetStateAction<{
       [k: number]: boolean;
   }>>
 }
 
-const CheckoutForm: React.FC<Props> = ({ purchaseTicketRequest, changeStatus }) => {
+const CheckoutForm: React.FC<Props> = ({ purchaseTicketRequest, changeStatus, changeStep }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -79,7 +80,8 @@ const CheckoutForm: React.FC<Props> = ({ purchaseTicketRequest, changeStatus }) 
     }
 
     setIsProcessing(false);
-    changeStatus({[1] : true})
+    changeStatus({[1] : true});
+    changeStep(2);
   };
 
   return (
