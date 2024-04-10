@@ -64,26 +64,22 @@ const PurchaseTicket: React.FC<Props> = (props: Props) => {
             ...purchaseTicketRequest,
             [event.target.name]: result
         })) 
-        console.log(purchaseTicketRequest)
     }
-
-
-    const fetchPoints = async () => {
-        try {
-            const response = await fetchDataWithoutParam(ApiMethod.GETTRAINROUTES);
-            const data = response.data;
-            setDeparturePoints(data.ResponseData);
-            setArrivalPoints(data.ResponseData);
-            // Update the state with the JSON list
-            setJourneyTypes(journeyTypeList);
-        } catch (error) {
-            console.error('Error fetching points:', error);
-            // Handle the error appropriately, e.g., display an error message to the user
-        }
-    };
   
     useEffect(() => {
-        // setEmail(sessionUserData?.email || 'insaneappcreator@gmail.com');
+        const fetchPoints = async () => {
+            try {
+                const response = await fetchDataWithoutParam(ApiMethod.GETTRAINROUTES);
+                const data = response.data;
+                setDeparturePoints(data.ResponseData);
+                setArrivalPoints(data.ResponseData);
+                // Update the state with the JSON list
+                setJourneyTypes(journeyTypeList);
+            } catch (error) {
+                console.error('Error fetching points:', error);
+                // Handle the error appropriately, e.g., display an error message to the user
+            }
+        };
         fetchPoints();
     }, []);
 
