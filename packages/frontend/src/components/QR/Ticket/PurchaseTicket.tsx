@@ -7,6 +7,7 @@ import Layout from '../../Layout';
 import { getSessionUserData } from '../../Utils';
 import { ApiMethod, fetchDataWithoutParam ,postDataByParams} from '../../../services/ApiUtils';
 import mrtMap from '../../../assets/mrtMap.png';
+import { SessionUserData } from '../../../services/types';
 
 const PurchaseTicket: React.FC = () => {
 
@@ -36,6 +37,7 @@ const PurchaseTicket: React.FC = () => {
 
     const [departurePointDes, setDeparturePointDes] = useState<string>('');
     const [arrivalPointDes, setArrivalPointDes] = useState<string>('');
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const navigate = useNavigate();
 
@@ -61,11 +63,12 @@ const PurchaseTicket: React.FC = () => {
     };
   
     useEffect(() => {
-        // setEmail(sessionUserData?.email || 'insaneappcreator@gmail.com');
+        setEmail(sessionUserData?.email || '');
         fetchPoints();
     }, []);
 
    const fetchFare = async () => {
+    setIsProcessing(true);
             try {
 
             const params = {
@@ -84,12 +87,30 @@ const PurchaseTicket: React.FC = () => {
             );
             const data = response.data;
             setAmount(data.ResponseData.fare);
-            console.log(data.ResponseData.fare)
+            console.log(data.ResponseData.fare)           
             return data.ResponseData.fare; 
             } catch (error) {
             console.error('Error fetching points:', error);
             // Handle the error appropriately, e.g., display an error message to the user
             }
+
+            // Store guest session data
+            if (sessionUserData) {
+                sessionUserData.email = email;
+              }else{
+                const guestSessionUserData: SessionUserData = {
+                    email: email,
+                    userName: '',
+                    role: '',
+                    phoneNumber: '',
+                    userId: '',
+                    accessToken: '',
+                    refreshToken: '',
+                    isAuthenticated: false
+                };
+                localStorage.setItem('sessionUserData', JSON.stringify(guestSessionUserData));
+              }
+            setIsProcessing(false);
         }; 
     
         const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -97,7 +118,7 @@ const PurchaseTicket: React.FC = () => {
             
             setError('');
             setSuccess(false);
-        
+            setIsProcessing(true);
             try {
                 // Fetch fare amount
                 const fareAmount = await fetchFare();
@@ -127,12 +148,31 @@ const PurchaseTicket: React.FC = () => {
                     email,
                 };
         
+                // Store guest session data
+                if (sessionUserData) {
+                    sessionUserData.email = email;
+                  }else{
+                    const guestSessionUserData: SessionUserData = {
+                        email: email,
+                        userName: '',
+                        role: '',
+                        phoneNumber: '',
+                        userId: '',
+                        accessToken: '',
+                        refreshToken: '',
+                        isAuthenticated: false
+                    };
+                    localStorage.setItem('sessionUserData', JSON.stringify(guestSessionUserData));
+                  }
+
                 // Navigate to Payment component with state
                 navigate('/payment', { state: { purchaseTicketRequest } });
             } catch (error) {
                 console.error('Error handling submit:', error);
                 setError('Failed to handle submit.');
             }
+
+            setIsProcessing(false);
         };
        
    
@@ -251,7 +291,25 @@ const PurchaseTicket: React.FC = () => {
                                 </Form.Group>
                             </Col>
                         </Row>
-
+                        {!sessionUserData?.isAuthenticated === true &&
+                        (
+                           <Form.Group controlId="formGroupSize" className="mb-4">
+                                    <Form.Label>Email *</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        placeholder="Enter Email"
+                                        value={email}
+                                        onChange={(e) => {
+                                            setEmail(e.target.value);
+                                            if (sessionUserData) {
+                                              sessionUserData.email = e.target.value;
+                                            }
+                                          }}
+                                        required
+                                    />
+                            </Form.Group>
+                         )
+                        } 
                         <Row className="mb-3">
                             <Col>
                                 <Form.Group controlId="formCalculateFare" className="mb-3">
@@ -265,28 +323,11 @@ const PurchaseTicket: React.FC = () => {
                                 </Form.Group>
                             </Col>
                             <Col className="mt-3">
-                            <Button  onClick={fetchFare} variant="primary" className="w-100 mt-3">
-                                Calculate
+                            <Button onClick={fetchFare} variant="primary" className="w-100 mt-3">
+                            Calculate
                             </Button>
-                           
                             </Col>
                         </Row>
-                    
-                         {!sessionUserData?.isAuthenticated === true &&
-                        (
-                           <Form.Group controlId="formGroupSize" className="mb-4">
-                                    <Form.Label>Email *</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        placeholder="Enter Email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                    />
-                            </Form.Group>
-                         )
-                    } 
-
                         <Button variant="primary" type="submit" className="w-100 mb-3">
                             Proceed Payment
                         </Button>

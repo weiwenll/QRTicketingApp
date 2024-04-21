@@ -20,6 +20,8 @@ export enum ApiMethod {
   REFUND = 'payments/Refund',
   CHANGEPASSWORD = 'users/ChangePassword',  
   FEEDBACK = 'general/Feedback',
+  VALIDATEOTP = 'auth/ValidateOtp',
+  SENDOTP = 'auth/SendOtp',
   // Add more endpoints as needed
 }
 

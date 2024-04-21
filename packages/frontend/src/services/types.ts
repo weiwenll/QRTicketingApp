@@ -71,3 +71,13 @@ export interface QRRefundDataProps {
     amount: number;
   };
 }
+
+export interface UserProps {
+  userPropsData: {    
+    userName: string,
+    phoneNumber: string,
+    email: string,
+    password: string,
+    role: string,
+  };
+}

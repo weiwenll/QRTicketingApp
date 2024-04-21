@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Modal, Spinner } from 'react-bootstrap';
 import { registerUser } from '../../services/ApiUtils';
-import { SessionUserData } from '../../services/types';
+import OTPForm from './OTPForm';
+import { SessionUserData, UserProps } from '../../services/types';
 
 const RegisterForm: React.FC = () => {
+
   const [username, setUsername] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -15,6 +17,10 @@ const RegisterForm: React.FC = () => {
   const [passwordError, setPasswordError] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<boolean>(false);
+
+  const [showOTPPopup, setShowOTPPopup] = useState(false);
+  const [userPropsData, setUserPropsData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   // Function to check password strength
@@ -37,7 +43,9 @@ const RegisterForm: React.FC = () => {
     // Test the email against the pattern
     return emailRegex.test(email);
   };
+  
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     event.preventDefault();
 
     setUsernameError('');
@@ -86,9 +94,19 @@ const RegisterForm: React.FC = () => {
       accessToken: '',
       refreshToken: '',
       isAuthenticated: true
+    };    
+
+    const userProps: UserProps = {
+      userPropsData: {
+        userName: username,
+        phoneNumber: phoneNumber,
+        email: email,
+        password: password,
+        role: "ROLE_USER"
+      }
     };
     
-     registerUser(userData).then(data => {
+    registerUser(userData).then(data => {
       const { accessToken, refreshToken, userName, email, role } = data;
       sessionUserData.accessToken=accessToken;
       sessionUserData.refreshToken=refreshToken;
@@ -99,19 +117,31 @@ const RegisterForm: React.FC = () => {
       
       setSuccess(true);
       setError('');
+      showOTPDialogBox(userProps.userPropsData);
 
-      setTimeout(() => {
-        navigate('/home');
-      }, 100);
     }).catch(error => {
       console.error(error);
       setError('Registration failed. Please try again.'); // TODO: Update error message based on actual API error response
       setSuccess(false);
     });
+
+    setLoading(false);
   };
+
   const handleContinueAsGuest = () => {
     localStorage.setItem('isGuest', 'true');
     navigate('/home', { state: { isAuthenticated: false } });
+  };
+
+
+  const showOTPDialogBox = (userData: any) => {
+    setUserPropsData(userData);
+    setLoading(false);
+    setShowOTPPopup(true);
+  };
+
+  const handleCloseQRPopup = () => {
+    setShowOTPPopup(false);
   };
 
   return (    
@@ -165,10 +195,17 @@ const RegisterForm: React.FC = () => {
         {/* <Form.Group controlId="formPassword" className="mb-3">
           <Form.Label className="text-center">{!success && error}</Form.Label>
         </Form.Group> */}
-        
+        {loading ? (
+                <Button variant="primary" type="button" className="w-100 mb-3" disabled>
+                  <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                </Button>
+              ) : (
+                
         <Button variant="primary" type="submit" className="w-100 mb-3">
-          Sign Up
-        </Button>
+        Sign Up
+      </Button>
+              )}
+        
         {error && <div className="alert alert-danger" role="alert">{error}</div>}
         {success && <div className="alert alert-success" role="alert">Registration successful!</div>}
         {/*<Form.Group className="text-muted text-center">
@@ -178,6 +215,17 @@ const RegisterForm: React.FC = () => {
         Or continue as a <a href="/home" onClick={handleContinueAsGuest}>Guest</a>
         </Form.Group>
       </Form>
+
+      <Modal show={showOTPPopup} onHide={handleCloseQRPopup}>
+            <Modal.Header closeButton>
+              <Modal.Title>OTP Verification</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {userPropsData && <OTPForm userPropsData={userPropsData} // Pass the function as prop
+              />} {/* Pass qrData as prop if available */}
+            </Modal.Body>
+          </Modal>
+          
     </Container>
   );
 };
