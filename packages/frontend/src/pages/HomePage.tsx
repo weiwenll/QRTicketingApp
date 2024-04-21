@@ -3,7 +3,7 @@ import { Container, Navbar, Nav, Button } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import backgroundImage from '../assets/background.webp';
 import Layout from '../components/Layout';
-import SmrtSelector from '../components/Map/stationSelector';
+//import SmrtSelector from '../components/Map/stationSelector';
 
 const HomePage: React.FC  = () => {
   return (
