@@ -6,6 +6,7 @@ import LoginForm from '../components/Auth/LoginForm';
 import RegisterForm from '../components/Auth/RegisterForm';
 import animatedImage from '../assets/home.png';
 
+
 const LandingPage: React.FC = () => {
   
   return (
@@ -97,10 +98,10 @@ const LandingPage: React.FC = () => {
         <h5 className='text-center mb-3'>Login/Signup</h5>
           <Nav variant="pills" className="flex-column flex-sm-row">
             <Nav.Item className="flex-grow-1">
-              <Nav.Link eventKey="login" className="btn btn-primary w-100">Login</Nav.Link>
+              <Nav.Link eventKey="login" className="btn btn-primary w-100" >Login</Nav.Link>
             </Nav.Item>
             <Nav.Item className="flex-grow-1">
-              <Nav.Link eventKey="register" className="btn btn-primary w-100">Signup</Nav.Link>
+              <Nav.Link eventKey="register" className="btn btn-primary w-100" >Signup</Nav.Link>
             </Nav.Item>
           </Nav>
         </Col>
