@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { UserLoginData, UserRegistrationData } from './types';
+import { UserLoginData, UserRegistrationData, FeedbackData } from './types';
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:5500/tg_query_api/api/v1/',
@@ -54,6 +54,23 @@ export const loginUser = async (data: UserLoginData) => {
     } else {
       console.error('Error message:', axiosError.message);
     }
+  }
+};
+
+export const sendFeedback = async (data: FeedbackData): Promise<Response> => {
+  try {
+    const axiosResponse = await apiClient.post(ApiMethod.FEEDBACK, data);
+    return new Response(axiosResponse.data, {status: axiosResponse.status});
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    if (axiosError.response) {
+      console.error('Error data:', axiosError.response.data);
+    } else if (axiosError.request) {
+      console.error('Error request:', axiosError.request);
+    } else {
+      console.error('Error message:', axiosError.message);
+    }
+    return new Response(null, {status: 500});
   }
 };
 

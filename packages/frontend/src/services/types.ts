@@ -22,6 +22,13 @@ export interface SessionUserData {
   isAuthenticated: boolean;
 }
 
+export interface FeedbackData {
+    name: string;
+    email: string;
+    category: string;
+    message: string;
+}
+
 export interface LayoutProps {  
   children: React.ReactNode;
 }
